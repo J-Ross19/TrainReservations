@@ -57,10 +57,12 @@
 	    	}
 	    	
 	    	out.print("<p>" + displayMessage + "</p>");
+	    	agents.close();
 	    }
 	    
 	    st.close();
 	    st2.close();
+	    rs.close();
     	db.closeConnection(con);
     %>
    </body>
