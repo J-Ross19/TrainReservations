@@ -15,23 +15,10 @@
 		String topic = request.getParameter("topic");
 		String message = request.getParameter("message");
 		String uName = (String)session.getAttribute("user");
-		//String agent = null;
-		//String reply = null;
 		
 		Database db = new Database();
 		Connection con = db.getConnection();
 	    Statement st = con.createStatement();
-	    
-	    /* try
-	    {
-	    	String maxIDquery = "SELECT max(messageid) FROM Messages;";	
-	    	ResultSet rs = st.executeQuery(maxIDquery);
-	    	//maxID = rs.getInt(1) + 1;
-	    }
-	    catch(Exception e)
-	    {
-	    	maxID = 1;
-	    } */
 	    
 	    String query = "INSERT INTO Messages(username, topic, message) VALUES (\'" + uName + "\', \'" + topic + "\', \'" + message + "\');";
 	    st.executeUpdate(query);

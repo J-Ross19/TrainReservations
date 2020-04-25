@@ -33,6 +33,8 @@
 	    String query = "UPDATE Messages SET reply=\'" + newReply + "\', ssn=\'" + ssn + "\' WHERE messageid= " + qid + ";";
 	    st.executeUpdate(query);
 	    st.close();
+	    st2.close();
+	    ssns.close();
     	db.closeConnection(con);
 	%>
 	<h3>Reply sent!</h3>

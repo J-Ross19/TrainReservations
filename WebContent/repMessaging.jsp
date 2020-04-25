@@ -42,6 +42,7 @@
 	    }
 	    
 	    st.close();
+	    rs.close();
     	db.closeConnection(con);
     %>
    </body>
