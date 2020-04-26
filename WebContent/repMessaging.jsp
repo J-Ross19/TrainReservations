@@ -45,5 +45,8 @@
 	    rs.close();
     	db.closeConnection(con);
     %>
+    <form action="customerRepHome.jsp" method="get">
+        <button>Home</button>
+	</form>
    </body>
 </html>

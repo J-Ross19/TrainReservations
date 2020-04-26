@@ -13,14 +13,14 @@
      <h3>Login</h3>
     <form action="checkLoginDetails.jsp" method="post">
         <h5>Username</h5>
-        <input name="username" type="text"/>
+        <input name="username" type="text" autocomplete="off" required>
         <h5>Password</h5>
-        <input name="password" type="password"/>
+        <input name="password" type="password" required>
         <br><br>
         <button>Login</button>
     </form>
     <h3>Dont Have An Account?</h3>
-    <form action="createPage.jsp" method="post">
+    <form action="createPage.jsp" method="get">
 		<button>Create an Account</button>
     </form>
      

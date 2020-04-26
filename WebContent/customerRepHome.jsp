@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+
 <%
     if ((session.getAttribute("user") == null)) { // Create page for user not logged in
 %>
@@ -22,10 +27,16 @@
    </head>
    <body>
    	<p>Logged in as <%=session.getAttribute("user")%></p>
-    <button onclick="window.location.href='messaging.jsp';">Messages</button>
-    <button onclick="window.location.href='repMessaging.jsp';">Reply to Messages</button><br/>
-    <button onclick="window.location.href='logout.jsp';">Log Out</button>
-    
+   	<form action="repMessaging.jsp" method="get">
+        <button>Reply to Customer Messages</button>
+	</form>
+	<form action="reservations.jsp" method="get">
+        <button>Access Reservations</button>
+	</form>
+    <br/>
+    <form action="logout.jsp" method="get">
+        <button>Log Out</button>
+	</form>
 
    </body>
 </html>

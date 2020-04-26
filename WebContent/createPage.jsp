@@ -13,13 +13,13 @@
 <p>Group 11:  Joshua Ross (jjr276), Ronak Parikh (rpp108), Bridget Savage (bhs46), James Hadley (jwh129), Srija Gottiparthi (sg1416)</p>
 <h3>Create an Account</h3>
 <form action="create.jsp" method="post">
-    <h5>First Name</h5> <input type="text" name="name_firstname" required>
-    <h5>Last Name</h5> <input type="text" name="name_lastname" required>
-    <h5>Username </h5><input type="text" name="username" required>
-    <h5>Password  </h5><input type="password" name="password" required>
-    <h5>Email </h5><input type="text" name="email" required> <br/>
-    <h5>Street Address </h5> <input type="text" name="street_address" required>
-    <h5> City</h5> <input type="text" name="city" required>
+    <h5>First Name</h5> <input type="text" name="name_firstname" autocomplete="off" required>
+    <h5>Last Name</h5> <input type="text" name="name_lastname" autocomplete="off" required>
+    <h5>Username </h5><input type="text" name="username" autocomplete="off" required>
+    <h5>Password  </h5><input type="password" name="password" autocomplete="off" required>
+    <h5>Email </h5><input type="text" name="email" autocomplete="off" required> <br/>
+    <h5>Street Address </h5> <input type="text" name="street_address" autocomplete="off" required>
+    <h5> City</h5> <input type="text" name="city" autocomplete="off" required>
     <h5>State</h5> <select name="state" required>
     <option value="AL">Alabama</option>
     <option value="AK">Alaska</option>
@@ -73,8 +73,8 @@
     <option value="WI">Wisconsin</option>
     <option value="WY">Wyoming</option>
 </select>
-    <h5>Zip Code</h5> <input type="text" name="zip" required>
-    <h5>Phone Number</h5> <input type="text" name="telephone" required><br/><br><br>
+    <h5>Zip Code</h5> <input type="text" name="zip" autocomplete="off" required>
+    <h5>Phone Number</h5> <input type="text" name="telephone" autocomplete="off" required><br/><br><br>
     <input type="submit" value="Create Account"><br><br><br>
 </form>
 </body>
