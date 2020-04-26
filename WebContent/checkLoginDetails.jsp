@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="main.*"%>
-    <%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,9 +33,9 @@
     	db.closeConnection(con);
         session.setAttribute("user", userid); // the username will be stored in the session
         out.println("<p>Logged in as Customer " + userid+".</p>");
-        out.println("<button onclick=\"window.location.href='messaging.jsp';\">Messages</button>");
-        out.println("<button onclick=\"window.location.href='logout.jsp';\">Log Out</button>");
-        //response.sendRedirect("success.jsp");
+        //out.println("<button onclick=\"window.location.href='messaging.jsp';\">Messages</button>");
+        //out.println("<button onclick=\"window.location.href='logout.jsp';\">Log Out</button>");
+        response.sendRedirect("customerHome.jsp");
         //NOTE: I get that the success.jsp page is supposed to demonstrate using the sessions, but it makes no sense for a login page
         
     } 
