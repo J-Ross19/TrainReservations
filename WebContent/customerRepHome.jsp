@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Train HomePage</title>
+      <title>Train Employee Home</title>
    </head>
    <body>
    	<p>You are not logged in</p><br/>
@@ -18,14 +18,14 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Train HomePage</title>
+      <title>Train Employee Home</title>
    </head>
    <body>
-   	<p>Welcome <%=session.getAttribute("user")%>!</p>
-   	<button onclick="window.location.href='messaging.jsp';">Message customer support</button>
-	<button onclick="window.location.href='logout.jsp';">Log Out</button>
-
-
+   	<p>Logged in as <%=session.getAttribute("user")%></p>
+    <button onclick="window.location.href='messaging.jsp';">Messages</button>
+    <button onclick="window.location.href='repMessaging.jsp';">Reply to Messages</button><br/>
+    <button onclick="window.location.href='logout.jsp';">Log Out</button>
+    
 
    </body>
 </html>
