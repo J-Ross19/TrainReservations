@@ -26,11 +26,17 @@
     Database db = new Database();
     Connection con = db.getConnection();
     Statement st = con.createStatement();
-    ResultSet rs = st.executeQuery("SELECT * from Customer where username='" + userid + "'");
-    
-    if (rs.next()||userid==null||pwd==null) {
+    Statement st5 = con.createStatement();
+    Statement st6 = con.createStatement();
+    ResultSet rs = st.executeQuery("SELECT * from Customer where username='" + userid + "';");
+    ResultSet rs5 = st.executeQuery("SELECT * from Employee_Customer_Rep where username='" + userid + "';"), rs6=st.executeQuery("SELECT * from Employee_Site_Manager where username='" + userid + "';");
+    if (rs.next()||userid==null||pwd==null||rs5.next()||rs6.next()) {
     	rs.close();
     	st.close();
+    	rs5.close();
+    	rs6.close();
+    	st5.close();
+    	st6.close();
     	con.close();
     	out.println("<p>Sorry that user already exists or is invalid. You can login or create an account with a different username.</p>");
         out.println("<button onclick=\"window.location.href='createPage.jsp';\">Try Again</button><br><button onclick=\"window.location.href='login.jsp';\">Log In</button>");
@@ -45,6 +51,10 @@
     	st2.close();
     	rs.close();
     	st.close();
+    	rs5.close();
+    	rs6.close();
+    	st5.close();
+    	st6.close();
     	db.closeConnection(con);
     	out.println("<p>Account Created!</p><button onclick=\"window.location.href='login.jsp';\">Log In</button>");
     }
