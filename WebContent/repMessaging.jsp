@@ -2,7 +2,7 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="main.*"%>
-    <%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <!DOCTYPE html>
 <html>
@@ -45,5 +45,8 @@
 	    rs.close();
     	db.closeConnection(con);
     %>
+    <form action="customerRepHome.jsp" method="get">
+        <button>Home</button>
+	</form>
    </body>
 </html>
