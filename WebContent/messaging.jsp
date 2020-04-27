@@ -36,12 +36,12 @@
 	    	String u = rs.getString("username");
 	    	String t = rs.getString("topic");
 	    	String m = rs.getString("message");
-	    	String ssn = rs.getString("ssn");
+	    	String repUser = rs.getString("usernameOfRep");
 	    	String a = "";
-	    	ResultSet agents = st2.executeQuery("SELECT username from Employee_Customer_Rep WHERE ssn=\'" + ssn + "\';");
+	    	ResultSet agents = st2.executeQuery("SELECT name_firstname from Employee_Customer_Rep WHERE username=\'" + repUser + "\';");
 	    	if (agents.next())
 	    	{
-	    		a = agents.getString("username");
+	    		a = agents.getString("name_firstname");
 	    	}
 	    	String rep = rs.getString("reply");
 	    	String displayMessage = "";

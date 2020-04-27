@@ -28,7 +28,7 @@
 	    Statement st = con.createStatement();
 	    
 	    //String uName = (String)session.getAttribute("user");
-	    ResultSet rs = st.executeQuery("SELECT * from Messages where ssn IS NULL and reply IS NULL");
+	    ResultSet rs = st.executeQuery("SELECT * from Messages where usernameOfRep IS NULL and reply IS NULL");
 	    while(rs.next())
 	    {
 	    	int qid = rs.getInt("messageid");

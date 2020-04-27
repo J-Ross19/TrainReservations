@@ -15,7 +15,7 @@
 		int qid = Integer.parseInt(request.getParameter("qid"));
 		String newReply = request.getParameter("reply");
 		String uName = (String)session.getAttribute("user");
-		String ssn = "";
+		//String ssn = "";
 		//String agent = null;
 		//String reply = null;
 		
@@ -24,17 +24,17 @@
 	    Statement st = con.createStatement();
 	    Statement st2 = con.createStatement();
 	    
-	    ResultSet ssns = st2.executeQuery("SELECT ssn from Employee_Customer_Rep WHERE username='" + uName + "';");
-	    if (ssns.next())
-	    {
-	    	ssn = ssns.getString("ssn");
-	    }
+	    //ResultSet ssns = st2.executeQuery("SELECT ssn from Employee_Customer_Rep WHERE username='" + uName + "';");
+	    //if (ssns.next())
+	    //{
+	    	//ssn = ssns.getString("ssn");
+	    //}
 	    
-	    String query = "UPDATE Messages SET reply=\'" + newReply + "\', ssn=\'" + ssn + "\' WHERE messageid= " + qid + ";";
+	    String query = "UPDATE Messages SET reply=\'" + newReply + "\', usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
 	    st.executeUpdate(query);
 	    st.close();
 	    st2.close();
-	    ssns.close();
+	    //ssns.close();
     	db.closeConnection(con);
 	%>
 	<h3>Reply sent!</h3>
