@@ -63,10 +63,7 @@
     	st3.close();
     	db.closeConnection(con);
         session.setAttribute("user", userid); // the username will be stored in the session
-        out.println("<p>Logged in as Site Administrator " + userid+".</p>");
-        out.println("<button onclick=\"window.location.href='messaging.jsp';\">Messages</button>");
-        out.println("<button onclick=\"window.location.href='repMessaging.jsp';\">Reply to Messages</button>");
-        out.println("<button onclick=\"window.location.href='logout.jsp';\">Log Out</button>");
+        response.sendRedirect("commandcenter.jsp");
     }
     else {
     	rs.close();
