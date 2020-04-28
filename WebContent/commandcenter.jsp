@@ -30,8 +30,6 @@ tr:nth-child(even) {
      
      <%
      	out.println("<p> Welcome Site Administrator " + ((String) (session.getAttribute("user")))+".</p>");
-        out.println("<button onclick=\"window.location.href='messaging.jsp';\">Messages</button>");
-        out.println("<button onclick=\"window.location.href='repMessaging.jsp';\">Reply to Messages</button>");
         out.println("<button onclick=\"window.location.href='logout.jsp';\">Log Out</button>");
      %>
      
