@@ -24,6 +24,16 @@ insert into Has_Ride_Origin_Destination_PartOf(connection_number,class,seat_numb
 insert into Stops_In_Between(transit_line_name,id,departure_time,arrival_time) values
 ('NJ Southern 83',6,'2020-01-30 11:30:00','2020-01-30 15:30:00');
 
+insert into Train(id,num_seats,num_cars) values (5,60,3);
+insert into Station(id,state,city) values (1,'NJ','Manasquan'),(2,'NJ','Long Branch'), (3,'NJ','Newark');
+insert into Schedule_Origin_of_Train_Destination_of_Train_On(transit_line_name,isDelayed,normal_fare,senior_child_fare,disabled_fare,destination_arrival_time,destination_departure_time,origin_arrival_time,origin_departure_time,origin_station_id,destination_station_id,train_id) values
+('NJ Coastal 24', false, 20,10,5,'2020-01-30 10:00:00','2020-01-30 11:00:00','2020-01-30 07:00:00','2020-01-30 07:30:00',1,3,5);
+insert into Stops_In_Between(transit_line_name,id,departure_time,arrival_time) values
+('NJ Coastal 24',2,'2020-01-30 08:30:00','2020-01-30 08:00:00'), ('NJ Coastal 24',5,'2020-01-30 09:30:00','2020-01-30 09:00:00');
+update Station set name = 'Manasquan Stop' where id = 1;
+update Station set name = 'Long Branch Stop' where id = 2;
+update Station set name = 'Newark Penn' where id = 3;
+
 #total fare (fare for each train taken + booking fee) for all reservations
 select reservation_number, (booking_fee+sum(fare)) as totalfare from (select reservation_number, booking_fee, (if(isChildOrSenior,senior_child_fare,if(isDisabled,disabled_fare,normal_fare))*if(class='economy',1,if(class='business',1.5,2))) as fare from (select r.reservation_number, booking_fee, class,isChildOrSenior,isDisabled,normal_fare,senior_child_fare,disabled_fare  from Reservation_Portfolio as r, Has_Ride_Origin_Destination_PartOf as rd, Schedule_Origin_of_Train_Destination_of_Train_On as s where r.reservation_number = rd.reservation_number and rd.transit_line_name=s.transit_line_name) as k) as n group by reservation_number
 union
