@@ -1,0 +1,46 @@
+Assumptions:
+1. Train cannot visit stop again in the same schedule (make a new schedule if the train wants to go back)
+
+2. Schedule goes from origin to destination once, so a train has to make a new schedule each time it goes
+along the northeast corridor route from start to finish so the transit line name should be like
+"northeast corridor round #47". This is strange because the primary key is a transit line name, but
+the Entity is a schedule/iteneraries and it has dates when the train will arrive at a stop, so its more of a
+schedule than a transit line since a transit line is something that is like repeated every day, but this stores
+specific days when the train goes to a stop and is a schedule of where that train will be on a datetime, so the
+primary key being called transit line name is really a misnomer
+
+3. Round trips are stored as 2 rides, one going and one coming, and it could be on 2 different train
+schedules/lines, there is also a boolean to indicate the reservation is a round trip
+
+4. Each ride is one ride of a train, if the customer has to make a connection to get to their destination, each
+additional connection is another ride on their reservation. The customer will list out all the connections they
+will make to get to their destination as pathfinding algorithms are not within the scope of the class. The user
+should ensure that they dont enter the same connection twice for instance as they will only be charged more for
+a connection they cant take,
+
+5. Monthly and weekly are like a pass that you can ride any train for the month or week if there is an open seat.
+These are of course avaliable at a much higher price than just a one off ticket but are a deal for frequent
+commuters
+
+6. Assuming 2 rides cant have the same seat number on a train on a schedule at the same time (may be able to
+enforce this in SQL)
+
+7. Assuming the reservation support customer rep relationship is not needed even though it is mentioned in the
+project description, we added it and were told to remove it in the feedback for the er diagram and we emailed
+the ta in charge of the project if we should do something else instead or just remove it on 3/23/20, but we
+recieved no response so we just removed it. Also in the email we were told that employees should have username
+and password but then we asked should the ssn still be their primary key then like the project desctiption says
+and did not reciveve a response so we changed the primary key to be username since it makes more sense.
+
+8. Admin will not create a customer rep with a username the same as another customer rep, and admin or a customer
+
+9. booleans line isWeekly, isMonthly  and isChildOrSenior,isDisabled are multually exclusive (enforced by what 
+website forms allow)
+
+10. Assuming "Produce a list of the 5 most active transit lines" means the 5 transit lines with the most number
+of rides in our case
+
+11. Assuming "Produce a list of reservations:
+[] by transit line and train number (e.g. NortheastCorridor #3425)
+[] by customer name " means rides in our case (a reservation can have 1 or more rides on a train schedule in
+our implementation)

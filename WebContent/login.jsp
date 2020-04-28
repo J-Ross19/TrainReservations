@@ -20,7 +20,7 @@
         <button>Login</button>
     </form>
     <h3>Dont Have An Account?</h3>
-    <form action="createPage.jsp" method="get">
+    <form action="createPage.jsp" method="post">
 		<button>Create an Account</button>
     </form>
      

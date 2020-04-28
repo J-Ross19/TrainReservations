@@ -1,0 +1,14 @@
+Total fare of a reservation:
+$35 booking fee (bf) one way normal trip + fare of each and every ride/schedule of that reservation of course
+$40 bf round trip + fare of each ride (2 rides at least one going and one coming)
+$300 bf weekly pass (note for this its just a booking fee there are no rides you
+		dont have to pay the fare of the schedule/ride, its like a season pass for 1 week)
+$1000 bf monthly pass
+
+for each ride fare is stored in schedule it points to, and there are 3 different fares in there: normal
+child/senior and disabled. You pick one of them based on the isChildOrSenior and isDisabled booleans in ride
+note both booleans cant be set at the same time
+(when they are making their reservation, next to each ride make a radio button if they are a child/senior, disabled, or none)
+
+economy class multiplies fare from a ride by *1, buisness by *1.5 and first by *2
+
