@@ -29,7 +29,9 @@
     Statement st5 = con.createStatement();
     Statement st6 = con.createStatement();
     ResultSet rs = st.executeQuery("SELECT * from Customer where username='" + userid + "';");
-    ResultSet rs5 = st5.executeQuery("SELECT * from Employee_Customer_Rep where username='" + userid + "';"), rs6=st6.executeQuery("SELECT * from Employee_Site_Manager where username='" + userid + "';");
+    ResultSet rs5 = st5.executeQuery("SELECT * from Employee_Customer_Rep where username='" + userid + "';");
+    ResultSet rs6=st6.executeQuery("SELECT * from Employee_Site_Manager where username='" + userid + "';");
+    
     if (rs.next()||userid==null||pwd==null||rs5.next()||rs6.next()) {
     	rs.close();
     	st.close();
