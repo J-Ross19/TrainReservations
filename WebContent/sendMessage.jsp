@@ -12,18 +12,25 @@
 </head> 
 <body>
 	<%
-		String topic = request.getParameter("topic");
-		String message = request.getParameter("message");
-		String uName = (String)session.getAttribute("user");
-		
-		Database db = new Database();
-		Connection con = db.getConnection();
-	    Statement st = con.createStatement();
-	    
-	    String query = "INSERT INTO Messages(username, topic, message) VALUES (\'" + uName + "\', \'" + topic + "\', \'" + message + "\');";
-	    st.executeUpdate(query);
-	    st.close();
-    	db.closeConnection(con);
+		if ((session.getAttribute("user") == null))
+		{
+			response.sendRedirect("login.jsp");
+		}
+		else
+		{
+			String topic = request.getParameter("topic");
+			String message = request.getParameter("message");
+			String uName = (String)session.getAttribute("user");
+			
+			Database db = new Database();
+			Connection con = db.getConnection();
+		    Statement st = con.createStatement();
+		    
+		    String query = "INSERT INTO Messages(username, topic, message) VALUES (\'" + uName + "\', \'" + topic + "\', \'" + message + "\');";
+		    st.executeUpdate(query);
+		    st.close();
+	    	db.closeConnection(con);
+		}
 	%>
 	<h3>Message sent!</h3>
 	<form action="messaging.jsp" method="post">

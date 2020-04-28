@@ -11,7 +11,14 @@
 <title>Message a Customer Representative</title>
 </head>
 <body>
-     <h3>Message a Customer Representative</h3>
+    <%
+    	if ((session.getAttribute("user") == null))
+    	{
+    		response.sendRedirect("login.jsp");
+    	}
+	%>
+	
+    <h3>Message a Customer Representative</h3>
     <form action="sendMessage.jsp" method="post">
         <h5>Message topic:</h5>
         <input name="topic" type="text">
@@ -19,6 +26,9 @@
         <input name="message" type="text"/>
         <br><br>
         <button>Send</button>
+    </form>
+    <form action="customerHome.jsp">
+    	<button>Back to Home</button>
     </form>
     <h3>A representative will get back to you as soon as possible.</h3>
     <br>

@@ -11,7 +11,14 @@
 <title>Representative Messaging Dashboard</title>
 </head>
 <body>
-     <h3>Respond to Customers</h3>
+    <%
+    	if ((session.getAttribute("user") == null))
+    	{
+    		response.sendRedirect("login.jsp");
+    	}
+	%>
+    
+    <h3>Respond to Customers</h3>
     <form action="repSendReply.jsp" method="post">
         <h5>Question ID:</h5>
         <input name="qid" type="text">
@@ -19,6 +26,9 @@
         <input name="reply" type="text"/>
         <br><br>
         <button>Send</button>
+    </form>
+    <form action="customerRepHome.jsp">
+    	<button>Back to Home</button>
     </form>
     <br>
     <h3>Unanswered Messages:</h3>
