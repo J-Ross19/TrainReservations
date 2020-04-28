@@ -37,7 +37,16 @@
    	<h3>Search by Reservation Number</h3>
    	<form action="reservations.jsp" method="post">
   		<label for="resID">Reservation Number:</label>
- 		<input type="text" name="resID"><br/><br/>
+ 		<input type="text" name="resID" required><br/><br/>
+  		<input type="submit" value="Submit">
+	</form>
+    <br/>
+    <h3>Search by Transit Line or Train ID (only need one)</h3>
+   	<form action="reservations.jsp" method="post">
+  		<label for="transit">Transit Line:</label>
+ 		<input type="text" name="transit"><br/>
+ 		<label for="trainID">Train:</label>
+ 		<input type="text" name="trainID"><br/><br/>
   		<input type="submit" value="Submit">
 	</form>
     <br/>
@@ -45,6 +54,7 @@
     <form action="reservations.jsp" method="get">
         <button>Reset</button>
 	</form><br/>
+
     <%
     
 	try {
@@ -55,10 +65,15 @@
 	    
 		
 		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-		String query = "SELECT * FROM Reservation_Portfolio join Has_Ride_Origin_Destination_PartOf using (reservation_number)";
+		String query =  "SELECT * FROM Customer AS C join Reservation_Portfolio AS R using (username)"
+					+	" join Has_Ride_Origin_Destination_PartOf AS H using (reservation_number)" 
+					+	" join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
+					+	" join Train AS T on (S.train_id = T.id)";
 		
-		// Check if username was set
+		// Check if parameters were set
 		String resID = request.getParameter("resID");
+		String transit = request.getParameter("transit");
+		String trainID = request.getParameter("trainID");
 		
 		//request.setAttribute("empid", "1234"); ENDJSP
 		//<jsp:include page="/servlet/MyServlet" flush="true"/>
@@ -66,6 +81,10 @@
 		// If there is a username
 		if (resID != null) {
 			query += " WHERE reservation_number = \'" + resID + "\'";
+		} else if (transit != null) {
+			query += " WHERE transit_line_name = \'" + transit + "\'";
+		} else if (trainID != null) {
+			query += " WHERE S.train_id LIKE \'" + trainID + "\'";
 		}
 		
 		//Execute query against the database.
@@ -80,12 +99,14 @@
 		//make header columns
 		out.print("<th>Reservation Number</td>");
 		out.print("<th>Username</td>");
+		out.print("<th>Customer Name</td>");
 		out.print("<th>Type of Reservation</td>");
 		out.print("<th>Reservation Created</td>");
 		out.print("<th>Booking Fee</td>");
+		out.print("<th>Transit Line</td>");
+		out.print("<th>Train ID</td>");
 		out.print("<th>Boarding Class</td>");
 		out.print("<th>Seat Number</td>");
-		out.print("<th>Transit Line</td>");
 		out.print("<th>Origin Station ID</td>");
 		out.print("<th>Destination Station ID</td>");
 
@@ -103,6 +124,10 @@
 			
 			out.print("<td>");
 			out.print(rs.getString("username"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs.getString("name_firstname") + " " + rs.getString("name_lastname"));
 			out.print("</td>");
 			
 			// Type of Reservation
@@ -129,6 +154,14 @@
 			out.print("</td>");
 			
 			out.print("<td>");
+			out.print(rs.getString("transit_line_name"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs.getString("train_id"));
+			out.print("</td>");
+			
+			out.print("<td>");
 			out.print(rs.getString("class"));
 			out.print("</td>");			
 			
@@ -137,15 +170,11 @@
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(rs.getString("transit_line_name"));
+			out.print(rs.getString("H.origin_id"));
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(rs.getString("origin_id"));
-			out.print("</td>");
-			
-			out.print("<td>");
-			out.print(rs.getString("destination_id"));
+			out.print(rs.getString("H.destination_id"));
 			out.print("</td>");
 			
 			out.print("</tr>");
@@ -161,8 +190,6 @@
 		out.print(e);
 	}
     
-    
     %>
-    
    </body>
 </html>
