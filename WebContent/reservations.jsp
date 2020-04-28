@@ -7,22 +7,52 @@
 <html>
    <head>
       <title>Reservations</title>
+      <style>
+      	table {
+      		width: 100%;
+      	}
+      	table, th, td {
+      		border: 1px solid black;
+			border-collapse: collapse;
+		}
+		th, td {
+			text-align: center;
+		}
+		table tr:nth-child(even) {
+			background-color: #eee;
+		}
+		table tr:nth-child(odd) {
+			background-color: #fff;
+		}
+		table th {
+			background-color: aqua;
+			color: black;
+		}
+      </style>
    </head>
    <body>
    	<form action="customerRepHome.jsp" method="get">
         <button>Home</button>
 	</form>
-   	<h3>Search by Reservation Number</h3>
+   	<h3>Search by Reservation Number:</h3>
    	<form action="reservations.jsp" method="post">
   		<label for="resID">Reservation Number:</label>
  		<input type="text" name="resID"><br/><br/>
   		<input type="submit" value="Submit">
 	</form>
     <br/>
+    <h3>Add Reservation</h3>
+    <form method="post" action="some_page" class="inline">
+		<input type="hidden" name="extra_submit_param" value="extra_submit_value">
+		<button type="submit" name="submit_param" value="submit_value" class="link-button">
+			ADD
+		</button>
+	</form>
     <h3>Train Reservations:</h3>
     <form action="reservations.jsp" method="get">
         <button>Reset</button>
-	</form><br/>
+	</form>
+	<br/>
     <%
     
 	try {
@@ -51,21 +81,23 @@
 		
 		
 		//Make an HTML table to show the results in:
-		out.print("<table>");
+		out.print("<table style=\'border: 1px solid black\' align:\'center\'>");
 
 		//make header row
 		out.print("<tr>");
 		//make header columns
-		out.print("<td>Reservation Number</td>");
-		out.print("<td>Username</td>");
-		out.print("<td>Type of Reservation</td>");
-		out.print("<td>Reservation Created</td>");
-		out.print("<td>Booking Fee</td>");
-		out.print("<td>Boarding Class</td>");
-		out.print("<td>Seat Number</td>");
-		out.print("<td>Transit Line</td>");
-		out.print("<td>Origin Station ID</td>");
-		out.print("<td>Destination Station ID</td>");
+		out.print("<th>Reservation Number</td>");
+		out.print("<th>Username</td>");
+		out.print("<th>Type of Reservation</td>");
+		out.print("<th>Reservation Created</td>");
+		out.print("<th>Booking Fee</td>");
+		out.print("<th>Boarding Class</td>");
+		out.print("<th>Seat Number</td>");
+		out.print("<th>Transit Line</td>");
+		out.print("<th>Origin Station ID</td>");
+		out.print("<th>Destination Station ID</td>");
+		//out.print("<th>Edit</td>");
+		//out.print("<th>Remove</td>");
 
     	out.print("</tr>");
     	
@@ -124,6 +156,14 @@
 			
 			out.print("<td>");
 			out.print(rs.getString("destination_id"));
+			out.print("</td>");
+			
+			// Create edit functionality
+			
+			// Create remove functionality
+
+
+
 			out.print("</td>");
 			
 			out.print("</tr>");

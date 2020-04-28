@@ -60,18 +60,18 @@
 		out.print("<tr>");
 		
 		//make header columns
-		out.print("<td>Transit Line</td>");
-		out.print("<td>Train ID</td>");
-		out.print("<td>Origin</td>");
-		out.print("<td>Destination</td>");
-		out.print("<td>Seats Available</td>");
-		out.print("<td>Stops (by Station id)</td>");
-		out.print("<td>Origin Arrival DateTime</td>");
-		out.print("<td>Origin Departure DateTime</td>");
-		out.print("<td>Destination Arrival DateTime</td>");
-		out.print("<td>Destination Departure DateTime</td>");
-		out.print("<td>Travel Time</td>");
-		out.print("<td>Fare</td>");
+		out.print("<th>Transit Line</td>");
+		out.print("<th>Train ID</td>");
+		out.print("<th>Origin</td>");
+		out.print("<th>Destination</td>");
+		out.print("<th>Seats Available</td>");
+		out.print("<th>Stops (by Station id)</td>");
+		out.print("<th>Origin Arrival DateTime</td>");
+		out.print("<th>Origin Departure DateTime</td>");
+		out.print("<th>Destination Arrival DateTime</td>");
+		out.print("<th>Destination Departure DateTime</td>");
+		out.print("<th>Travel Time</td>");
+		out.print("<th>Fare</td>");
 
     	out.print("</tr>");
     	

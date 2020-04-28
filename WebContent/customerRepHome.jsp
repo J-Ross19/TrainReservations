@@ -13,7 +13,9 @@
    </head>
    <body>
    	<p>You are not logged in</p><br/>
-	<button onclick="window.location.href='login.jsp';">Log in</button>
+   	<form action="login.jsp" method="get">
+        <button>Log in</button>
+	</form>
    </body>
 </html>
 
