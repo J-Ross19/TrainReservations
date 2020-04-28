@@ -36,7 +36,7 @@
 		    	//ssn = ssns.getString("ssn");
 		    //}
 		    
-		    String query = "UPDATE Messages SET reply=\'" + newReply + "\', usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
+		    String query = "UPDATE Messages SET reply=\"" + newReply + "\", usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
 		    st.executeUpdate(query);
 		    st.close();
 		    st2.close();
