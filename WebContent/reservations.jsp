@@ -7,6 +7,28 @@
 <html>
    <head>
       <title>Reservations</title>
+      <style>
+      	table {
+			width:100%;
+		}
+		table, th, td {
+  			border: 1px solid black;
+ 			border-collapse: collapse;
+		}
+		th, td {
+  			text-align: center;
+		}
+		table tr:nth-child(even) {
+  			background-color: #eee;
+		}
+		table tr:nth-child(odd) {
+ 			background-color: #fff;
+		}
+		table th {
+  			background-color: cyan;
+  			color: black;
+		}
+	  </style>
    </head>
    <body>
    	<form action="customerRepHome.jsp" method="get">
