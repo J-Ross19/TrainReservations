@@ -33,6 +33,9 @@
 	<form action="reservations.jsp" method="get">
         <button>Access Reservations</button>
 	</form>
+	<form action="schedules.jsp" method="get">
+        <button>Access Train Schedules</button>
+	</form>
     <br/>
     <form action="logout.jsp" method="get">
         <button>Log Out</button>
