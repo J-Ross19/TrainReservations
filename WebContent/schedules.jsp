@@ -50,6 +50,13 @@
   		<input type="submit" value="Submit">
 	</form>
     <br/>
+    <h3>Create Schedule:</h3>
+   	<form action="modifySchedules.jsp" method="post">
+  		<label for="transit">Transit Line Name:</label>
+ 		<input type="text" name="transit" required><br/><br/>
+  		<input type="submit" value="Submit">
+	</form>
+    <br/>
     <h3>Train Schedules:</h3>
     <form action="schedules.jsp" method="get">
         <button>Reset</button>
