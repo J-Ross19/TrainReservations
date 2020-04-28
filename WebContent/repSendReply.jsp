@@ -12,30 +12,37 @@
 </head> 
 <body>
 	<%
-		int qid = Integer.parseInt(request.getParameter("qid"));
-		String newReply = request.getParameter("reply");
-		String uName = (String)session.getAttribute("user");
-		//String ssn = "";
-		//String agent = null;
-		//String reply = null;
-		
-		Database db = new Database();
-		Connection con = db.getConnection();
-	    Statement st = con.createStatement();
-	    Statement st2 = con.createStatement();
-	    
-	    //ResultSet ssns = st2.executeQuery("SELECT ssn from Employee_Customer_Rep WHERE username='" + uName + "';");
-	    //if (ssns.next())
-	    //{
-	    	//ssn = ssns.getString("ssn");
-	    //}
-	    
-	    String query = "UPDATE Messages SET reply=\'" + newReply + "\', usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
-	    st.executeUpdate(query);
-	    st.close();
-	    st2.close();
-	    //ssns.close();
-    	db.closeConnection(con);
+		if ((session.getAttribute("user") == null))
+		{
+			response.sendRedirect("login.jsp");
+		}
+		else
+		{
+			int qid = Integer.parseInt(request.getParameter("qid"));
+			String newReply = request.getParameter("reply");
+			String uName = (String)session.getAttribute("user");
+			//String ssn = "";
+			//String agent = null;
+			//String reply = null;
+			
+			Database db = new Database();
+			Connection con = db.getConnection();
+		    Statement st = con.createStatement();
+		    Statement st2 = con.createStatement();
+		    
+		    //ResultSet ssns = st2.executeQuery("SELECT ssn from Employee_Customer_Rep WHERE username='" + uName + "';");
+		    //if (ssns.next())
+		    //{
+		    	//ssn = ssns.getString("ssn");
+		    //}
+		    
+		    String query = "UPDATE Messages SET reply=\"" + newReply + "\", usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
+		    st.executeUpdate(query);
+		    st.close();
+		    st2.close();
+		    //ssns.close();
+	    	db.closeConnection(con);
+		}
 	%>
 	<h3>Reply sent!</h3>
 	<form action="repMessaging.jsp" method="post">
