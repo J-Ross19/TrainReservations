@@ -25,7 +25,7 @@
  			background-color: #fff;
 		}
 		table th {
-  			background-color: cyan;
+  			background-color: aqua;
   			color: black;
 		}
 	  </style>
@@ -78,16 +78,16 @@
 		//make header row
 		out.print("<tr>");
 		//make header columns
-		out.print("<td>Reservation Number</td>");
-		out.print("<td>Username</td>");
-		out.print("<td>Type of Reservation</td>");
-		out.print("<td>Reservation Created</td>");
-		out.print("<td>Booking Fee</td>");
-		out.print("<td>Boarding Class</td>");
-		out.print("<td>Seat Number</td>");
-		out.print("<td>Transit Line</td>");
-		out.print("<td>Origin Station ID</td>");
-		out.print("<td>Destination Station ID</td>");
+		out.print("<th>Reservation Number</td>");
+		out.print("<th>Username</td>");
+		out.print("<th>Type of Reservation</td>");
+		out.print("<th>Reservation Created</td>");
+		out.print("<th>Booking Fee</td>");
+		out.print("<th>Boarding Class</td>");
+		out.print("<th>Seat Number</td>");
+		out.print("<th>Transit Line</td>");
+		out.print("<th>Origin Station ID</td>");
+		out.print("<th>Destination Station ID</td>");
 
     	out.print("</tr>");
     	
