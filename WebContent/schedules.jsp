@@ -50,14 +50,21 @@
   		<input type="submit" value="Submit">
 	</form>
     <br/>
-    <h3>Create Schedule:</h3>
+    <h4>Edit Schedules:</h4>
    	<form action="modifySchedules.jsp" method="post">
   		<label for="transit">Transit Line Name:</label>
- 		<input type="text" name="transit" required><br/><br/>
+ 		<input type="text" name="transit" required>
+ 		<h5>Action To Perform</h5>
+        <input required type="radio" name="action" value="add"/>Add
+  		<br/>
+  		<input required type="radio" name="action" value="edit"/>Edit
+  		<br/>
+  		<input required type="radio" name="action" value="delete"/>Delete
+        <br/><br/>
   		<input type="submit" value="Submit">
 	</form>
     <br/>
-    <h3>Train Schedules:</h3>
+    <h3>List of Train Schedules:</h3>
     <form action="schedules.jsp" method="get">
         <button>Reset</button>
 	</form><br/>
