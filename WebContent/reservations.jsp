@@ -14,6 +14,7 @@
 		table, th, td {
   			border: 1px solid black;
  			border-collapse: collapse;
+ 			font-size: 10pt;
 		}
 		th, td {
   			text-align: center;
@@ -45,7 +46,7 @@
    	<form action="reservations.jsp" method="post">
   		<label for="transit">Transit Line:</label>
  		<input type="text" name="transit"><br/>
- 		<label for="trainID">Train:</label>
+ 		<label for="trainID">Train ID:</label>
  		<input type="text" name="trainID"><br/><br/>
   		<input type="submit" value="Submit">
 	</form>
@@ -65,26 +66,38 @@
 	    
 		
 		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-		String query =  "SELECT * FROM Customer AS C join Reservation_Portfolio AS R using (username)"
-					+	" join Has_Ride_Origin_Destination_PartOf AS H using (reservation_number)" 
-					+	" join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
-					+	" join Train AS T on (S.train_id = T.id)";
+		String query =  "SELECT R.reservation_number, R.username, C.name_firstname, C.name_lastname,"
+			+	" R.isMonthly, R.isWeekly, R.isRoundTrip, R.date_made, R.booking_fee, FareCalc.totalFare - R.booking_fee AS fare,"
+			+	" H.transit_line_name, S.train_id, H.class, H.seat_number, H.origin_id, H.destination_id"
+			+	" FROM Customer AS C join Reservation_Portfolio AS R using (username)"
+			+	" left outer join Has_Ride_Origin_Destination_PartOf AS H using (reservation_number)"
+			+	" left outer join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
+			+	" left outer join Train AS T on (S.train_id = T.id)" 
+			+	" join ("
+			+	" select reservation_number, (booking_fee+sum(fare)) as totalfare"
+			+	" from"
+			+	" (select reservation_number, booking_fee,"
+			+	" (if(isChildOrSenior,senior_child_fare,if(isDisabled,disabled_fare,normal_fare))*"
+			+	" if(class='economy',1,if(class='business',1.5,2))) as fare"
+			+	" from (select r.reservation_number, booking_fee, class,isChildOrSenior,isDisabled,normal_fare,senior_child_fare,disabled_fare"
+			+	" from Reservation_Portfolio as r, Has_Ride_Origin_Destination_PartOf as rd, Schedule_Origin_of_Train_Destination_of_Train_On as s"
+			+	" where r.reservation_number = rd.reservation_number and rd.transit_line_name=s.transit_line_name) as k) as n group by reservation_number"
+			+	" union"
+			+	" select reservation_number, booking_fee as totalfare from Reservation_Portfolio as ri where ri.isWeekly or ri.isMonthly"
+			+	" ) as FareCalc using (reservation_number)";
 		
 		// Check if parameters were set
 		String resID = request.getParameter("resID");
 		String transit = request.getParameter("transit");
 		String trainID = request.getParameter("trainID");
 		
-		//request.setAttribute("empid", "1234"); ENDJSP
-		//<jsp:include page="/servlet/MyServlet" flush="true"/>
-		
 		// If there is a username
 		if (resID != null) {
 			query += " WHERE reservation_number = \'" + resID + "\'";
-		} else if (transit != null) {
-			query += " WHERE transit_line_name = \'" + transit + "\'";
+		} else if (transit != null && !transit.equals("")) {
+			query += " WHERE transit_line_name LIKE \'" + transit + "\'";
 		} else if (trainID != null) {
-			query += " WHERE S.train_id LIKE \'" + trainID + "\'";
+			query += " WHERE train_id = \'" + trainID + "\'";
 		}
 		
 		//Execute query against the database.
@@ -103,6 +116,7 @@
 		out.print("<th>Type of Reservation</td>");
 		out.print("<th>Reservation Created</td>");
 		out.print("<th>Booking Fee</td>");
+		out.print("<th>Fare (By Reservation)</td>");
 		out.print("<th>Transit Line</td>");
 		out.print("<th>Train ID</td>");
 		out.print("<th>Boarding Class</td>");
@@ -151,6 +165,10 @@
 			
 			out.print("<td>");
 			out.print(rs.getDouble("booking_fee"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs.getDouble("fare"));
 			out.print("</td>");
 			
 			out.print("<td>");
