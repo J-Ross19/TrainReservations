@@ -15,7 +15,7 @@
 
 	td, th {
 		font-family: arial, sans-serif;
-		font-size: 8pt;
+		font-size: 6pt;
   		border: 1px solid #dddddd;
   		text-align: left;
   		padding: 8px;
@@ -27,15 +27,15 @@
   </style>
 </head>
 <body>
-	<form action="schedules.jsp" method="get">
+	<form action="reservations.jsp" method="get">
      	<button>Back</button>
 	</form>
 <%
-String transit = request.getParameter("transit"),action = request.getParameter("action"), username = "fake", type = "nope";
+String resID = request.getParameter("resID"),action = request.getParameter("action"), username="temp";
 if(action.equals("add")){ // Add a schedule
 %>
 
-   <script>
+  <script>
    function addRow(){
    let numRows = parseInt(document.getElementsByName("numRows")[0].value);
    document.getElementsByName("numRows")[0].value=numRows+1;
@@ -48,12 +48,12 @@ if(action.equals("add")){ // Add a schedule
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
  
-	cell1.innerHTML = "<input required name=\"transitLine"+numRows+1+"\" type=\"text\"/> <label for=\"transitLine"+numRows+1+"\"> Transit Line Name</label> ";
-	cell2.innerHTML = "<select required name=\"class"+numRows+1+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
-	cell3.innerHTML = "<input required name=\"originId"+numRows+1+"\" type=\"number\"/> <label for=\"originId"+numRows+1+"\"> Origin Station Id</label>"
-	cell4.innerHTML = "<input required name=\"destId"+numRows+1+"\" type=\"number\"/> <label for=\"destId"+numRows+1+"\"> Destination Station Id</label>"
-	cell5.innerHTML = "<input required name=\"seatNumber"+numRows+1+"\" type=\"number\"/> <label for=\"seatNumber"+numRows+1+"\"> Seat Number</label>"
-	cell6.innerHTML = "<select required name=\"discount"+numRows+1+"\" ><option value='none'>None of the Above</option><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option></select>"
+	cell1.innerHTML =   " <input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+(numRows+1)+"\"> Transit Line Name</label> ";
+	cell2.innerHTML =  "	<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
+	cell3.innerHTML = " <input required name=\"originID"+(numRows+1)+"\" type=\"number\"/> <label for=\"originID"+(numRows+1)+"\"> Origin Station Id</label>"
+	cell4.innerHTML =	" <input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>"
+	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+(numRows+1)+"\"> Seat Number</label>"
+	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none' selected>None of the Above</option></select>"
    }
    
    function updateTable(){
@@ -75,21 +75,22 @@ if(action.equals("add")){ // Add a schedule
    </script>
    
    
-     <form action="reservationSubmition.jsp" method="post">
-     <h5>Reservation</h5>
-
-  
-  	<select required name="bookingFeeType"  onclick = "updateTable();">
-  	<option value='single' onclick = "updateTable();">One Way Trip</option>
-    <option value='monthly'onclick = "updateTable();">Monthly Pass</option>
-    <option value='weekly'onclick = "updateTable();">Weekly Pass</option>
-    <option value='round'onclick = "updateTable();">Round Trip</option>
-   
-    </select><br>
-    <label for="bookingFeeType"> Type of Reservation</label>
-  
-  	<input type="hidden" name="numRows" value =1>
+    <form action="createReservationCR.jsp" method="post">
+    <h5>Reservation</h5>
   	<br>
+    <label for="userID">For Username:</label>
+    <input type="text" name="userID" required><br/>
+    <label for="bFee">Booking Fee:</label>
+    <input type="number" step="0.01" name="bFee" required><br/>
+    <label for="bookingFeeType"> Type of Reservation</label>
+  	<select required name="bookingFeeType"  onclick = "updateTable();">
+  		<option value='single' onclick = "updateTable();">One Way Trip</option>
+    	<option value='monthly'onclick = "updateTable();">Monthly Pass</option>
+    	<option value='weekly'onclick = "updateTable();">Weekly Pass</option>
+    	<option value='round'onclick = "updateTable();">Round Trip</option>
+    </select>
+  	<input type="hidden" name="numRows" value =1>
+  <br>
      <table name="table">
      <tr>
      <td>
@@ -104,12 +105,12 @@ if(action.equals("add")){ // Add a schedule
     </select>
     </td>
     <td>
-        	<input required name="originId1" type="number"/>
-	<label for="originId1"> Origin Station Id</label>
+        	<input required name="originID1" type="number"/>
+	<label for="originID1"> Origin Station Id</label>
 	</td>
 	<td>
-	    	<input required name="destId1" type="number"/>
-	<label for="destId1"> Destination Station Id</label>
+	    	<input required name="destID1" type="number"/>
+	<label for="destID1"> Destination Station Id</label>
     </td>
     <td>
     	<input required name="seatNumber1" type="number"/>
@@ -117,17 +118,19 @@ if(action.equals("add")){ // Add a schedule
 	</td>
 	<td>
 		<select required name="discount1" >
-		<option value='none'>None of the Above</option>
-    <option value='childSenior'>Child/Senior</option>
-    <option value='disabled'>Disabled</option>
+    	<option value='childSenior'>Child/Senior</option>
+    	<option value='disabled'>Disabled</option>
+    	<option value='none' selected>None of the Above</option>
     </select>
     </td>
 	</tr>
      </table>
      <button type="button" name="jkjk" onclick="addRow();">Add Ride</button>
      <br><br>
-     <button name = "llll" type="submit">Submit</button>
+     <button  name="llll" type="submit">Submit</button>
      </form>
+   
+   	<button onclick="window.location.href='reservations.jsp';">Cancel Reservation</button>
    
 
 		
