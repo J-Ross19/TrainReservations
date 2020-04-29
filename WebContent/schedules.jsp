@@ -76,7 +76,9 @@
 	    Statement stmt = con.createStatement();
 	    
 		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-		String query = "SELECT *, TIMEDIFF(destination_arrival_time,origin_departure_time) AS 'diff' FROM Schedule_Origin_of_Train_Destination_of_Train_On AS S join Train AS T on (T.id = S.train_id)";
+		String query = "SELECT *, TIMEDIFF(destination_arrival_time,origin_departure_time) AS 'diff', num_seats - count(seat_number) AS 'availSeats'" 
+			+	" from Train AS T join Schedule_Origin_of_Train_Destination_of_Train_On AS S on (S.train_id = T.id)" 
+			+	" left outer join (SELECT DISTINCT transit_line_name, seat_number FROM Has_Ride_Origin_Destination_PartOf) AS Seats using (transit_line_name)";
 		
 		// Query for temporary table containing all stops
 		/*
@@ -123,7 +125,7 @@
 				+	" and Temp.id = \'" + destID + "\')";
 		}
 		
-		
+		query += " GROUP BY T.id, transit_line_name";
 		
 		//Execute query against the database.
 		ResultSet rs = stmt.executeQuery(query);
@@ -140,7 +142,7 @@
 		out.print("<th>Train ID</td>");
 		out.print("<th>Origin Station</td>");
 		out.print("<th>Destination Station</td>");
-		out.print("<th>Number of Seats</td>");
+		out.print("<th>Seats Available</td>");
 		out.print("<th>Stops (by Station id)</td>");
 		out.print("<th>Delayed?</td>");
 		out.print("<th>Travel Time</td>");
@@ -174,7 +176,7 @@
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(rs.getInt("num_seats"));
+			out.print(rs.getInt("availSeats"));
 			out.print("</td>");
 			
 			// List of Stops
