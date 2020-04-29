@@ -70,9 +70,32 @@
               
     	} else {
     		Statement st2=con.createStatement();
+    		
+    		boolean isDelayed = false;
+    		
+    		Statement st9 = con.createStatement();
+        	ResultSet rs9 = st9.executeQuery("SELECT * FROM Stops_In_Between"
+        	+		" WHERE transit_line_name = '" + transit + "' and"
+        	+		" id = '" + stationID + "' and ('" + dTime + "' > departure_time"
+        	+		" or '" + aTime + "' > arrival_time);");
+        	
+        	if (rs9.next()) {
+        		isDelayed = true;
+        	}
+    		
     		String query = "UPDATE Stops_In_Between SET departure_time = '" + dTime + "', arrival_time = '" + aTime
     		+		"' WHERE transit_line_name = '" + transit + "' and id = '" + stationID + "'";
     		st2.executeUpdate(query);
+    		
+    		if (isDelayed) {
+        		Statement st157=con.createStatement();
+        		query = "UPDATE Schedule_Origin_of_Train_Destination_of_Train_On SET isDelayed = '1' WHERE transit_line_name = '" + transit + "'";
+        	    st2.executeUpdate(query);
+    		}
+    		
+    		
+    		rs9.close();
+    		st9.close();
     		rs.close();
     		st.close();
     		rs5.close();

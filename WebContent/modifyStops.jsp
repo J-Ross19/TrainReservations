@@ -33,7 +33,7 @@ if(action.equals("add")){ // Add a schedule
 	rs.close();
     st.close();
     con.close();
-    out.println("<p>Sorry that user doesnt exist.</p>");
+    out.println("<p>Sorry that stop doesnt exist.</p>");
     out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
 	}else{
 		rs.first();
