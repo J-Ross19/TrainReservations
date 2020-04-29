@@ -58,7 +58,7 @@
     	ResultSet rs6 = st6.executeQuery("SELECT * from Station where id ='" + originID + "';");
     	ResultSet rs7 = st7.executeQuery("SELECT * from Station where id ='" + destID + "';");
     	ResultSet rs8 = st8.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = '" + transit + "' and ('" + originDTime + "' > arrival_time or '" + destATime + "' < departure_time)");
-    	if (rs.next()||transit==null||fare==null||scFare==null||dFare==null||!rs5.next()||!rs6.next()||!rs7.next()||!rs8.next()) {
+    	if (rs.next()||transit==null||fare==null||scFare==null||dFare==null||!rs5.next()||!rs6.next()||!rs7.next()||rs8.next()) {
     		rs.close();
     		st.close();
     		rs5.close();
