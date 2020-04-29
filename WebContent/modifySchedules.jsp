@@ -107,12 +107,12 @@ if(action.equals( "add")){ // Add a schedule
 	Database db = new Database();	
 	Connection con = db.getConnection();
 	Statement st = con.createStatement();
-	st.executeUpdate("delete from Customer where username= \""+username +"\";");
+	st.executeUpdate("delete from Schedule_Origin_of_Train_Destination_of_Train_On where transit_line_name= \""+transit +"\";");
 	st.close();
 	db.closeConnection(con);
 	out.println("<p>Deleted</p>");
 	
-	out.println("<button onclick=\"window.location.href='commandcenter.jsp';\">Go Back</button>");
+	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
 }
 %>
 </body>
