@@ -57,7 +57,7 @@
     	ResultSet rs5 = st5.executeQuery("SELECT * from Train where id ='" + trainID + "';");
     	ResultSet rs6 = st6.executeQuery("SELECT * from Station where id ='" + originID + "';");
     	ResultSet rs7 = st7.executeQuery("SELECT * from Station where id ='" + destID + "';");
-    	ResultSet rs8 = st8.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = 'NJ Coastal 24' and ('" + originDTime + "' > arrival_time or '" + destATime + "' < departure_time)");
+    	ResultSet rs8 = st8.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = '" + transit + "' and ('" + originDTime + "' > arrival_time or '" + destATime + "' < departure_time)");
     	if (rs.next()||transit==null||fare==null||scFare==null||dFare==null||!rs5.next()||!rs6.next()||!rs7.next()||!rs8.next()) {
     		rs.close();
     		st.close();
@@ -70,7 +70,7 @@
     		st7.close();
     		st8.close();
     		db.closeConnection(con);
-    		out.println("<p>Sorry, Transit Line already exists or (Train ID or Station ids) do not exist</p>");
+    		out.println("<p>Sorry, Transit Line already exists or Invalid Train ID or Station IDs or Timings</p>");
         	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
               
     	} else {
@@ -90,6 +90,7 @@
     		st6.close();
     		st7.close();
     		st8.close();
+    		st2.close();
     		db.closeConnection(con);
     		out.println("<p>Schedule Created!</p>");
     		out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
