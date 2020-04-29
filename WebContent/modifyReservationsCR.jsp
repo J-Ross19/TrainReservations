@@ -59,12 +59,15 @@ if(action.equals("add")){ // Add a schedule
    function updateTable(){
 	   var x = document.getElementsByName("table")[0];
 	   var y = document.getElementsByName("jkjk")[0];
+	   let z = document.getElementsByName("llll")[0];
 	   if(document.getElementsByName("bookingFeeType")[0].value=='monthly' || document.getElementsByName("bookingFeeType")[0].value=='weekly'){
 		   y.style.display = "none";
 		   x.style.display = "none";
+		   z.setAttribute("formnovalidate");
 	   }else{
 		   y.style.display = "block";
 		   x.style.display = "block";
+		   z.removeAttribute("formnovalidate");
 	   }
 	   
    }
@@ -123,7 +126,7 @@ if(action.equals("add")){ // Add a schedule
      </table>
      <button type="button" name="jkjk" onclick="addRow();">Add Ride</button>
      <br><br>
-     <button type="submit">Submit</button>
+     <button name = "llll" type="submit">Submit</button>
      </form>
    
 
