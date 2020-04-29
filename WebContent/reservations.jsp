@@ -14,7 +14,7 @@
 		table, th, td {
   			border: 1px solid black;
  			border-collapse: collapse;
- 			font-size: 10pt;
+ 			font-size: 8pt;
 		}
 		th, td {
   			text-align: center;
@@ -48,6 +48,20 @@
  		<input type="text" name="transit"><br/>
  		<label for="trainID">Train ID:</label>
  		<input type="text" name="trainID"><br/><br/>
+  		<input type="submit" value="Submit">
+	</form>
+    <br/>
+    <h4>Modify Reservations:</h4>
+   	<form action="modifyReservationsCR.jsp" method="post">
+  		<label for="resNumber">Reservation Number (unnecessary for add):</label>
+ 		<input type="text" name="transit">
+ 		<h5>Action To Perform</h5>
+        <input required type="radio" name="action" value="add"/>Add
+  		<br/>
+  		<input required type="radio" name="action" value="edit"/>Edit
+  		<br/>
+  		<input required type="radio" name="action" value="delete"/>Delete
+        <br/><br/>
   		<input type="submit" value="Submit">
 	</form>
     <br/>
