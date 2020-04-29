@@ -41,7 +41,7 @@
     }
     
     if (invalidDate) {
-    	out.println("<p>Sorry that date is in invalid format.</p>");
+    	out.println("<p>Sorry that date is in an invalid format.</p>");
         out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
     }
     else {

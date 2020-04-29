@@ -9,13 +9,15 @@
 </head>
 <body>
 <%
-String transit = request.getParameter("transit"),action = request.getParameter("action"), username = "temp";
+String transit = request.getParameter("transit"),action = request.getParameter("action");
 if(action.equals( "add")){ // Add a schedule
 %>
 	<h4>Edit Stops:</h4>
 	<form action="modifyStops.jsp" method="post">
   		<label for="stop">Transit Line Name:</label>
  		<input type="text" name="transit" value="<%out.println(transit);%>" required>
+ 		<label for="stop">Station ID:</label>
+ 		<input type="text" name="stationID" required>
  		<h5>Action To Perform</h5>
         <input required type="radio" name="action" value="add"/>Add
   		<br/>
@@ -75,6 +77,8 @@ if(action.equals( "add")){ // Add a schedule
 	<form action="modifyStops.jsp" method="post">
   		<label for="stop">Transit Line Name:</label>
  		<input type="text" name="transit" value="<%out.println(transit);%>" required>
+ 		<label for="stop">Station ID:</label>
+ 		<input type="text" name="stationID" required>
  		<h5>Action To Perform</h5>
         <input required type="radio" name="action" value="add"/>Add
   		<br/>
