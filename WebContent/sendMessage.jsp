@@ -27,7 +27,7 @@
 		    Statement st = con.createStatement();
 		    
 		    String query = "INSERT INTO Messages(username, topic, message) " 
-		    	+ "VALUES (\'" + uName + "\', \'" + topic + "\', \"" + message + "\'');";
+		    	+ "VALUES (\'" + uName + "\', \'" + topic + "\', \"" + message + "\");";
 		    st.executeUpdate(query);
 		    st.close();
 	    	db.closeConnection(con);

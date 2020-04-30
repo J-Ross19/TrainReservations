@@ -39,16 +39,23 @@
 	    
 	    //String uName = (String)session.getAttribute("user");
 	    ResultSet rs = st.executeQuery("SELECT * from Messages where usernameOfRep IS NULL and reply IS NULL");
-	    while(rs.next())
+	    if(!rs.next())
 	    {
-	    	int qid = rs.getInt("messageid");
-	    	String u = rs.getString("username");
-	    	String t = rs.getString("topic");
-	    	String m = rs.getString("message");
+	    	out.print("<p>There are no unanswered messages.</p>");
+	    }
+	    else
+	    {
+	    	while(rs.next())
+		    {
+		    	int qid = rs.getInt("messageid");
+		    	String u = rs.getString("username");
+		    	String t = rs.getString("topic");
+		    	String m = rs.getString("message");
 
-	    	String displayMessage = "Question ID: " + qid + "<br>Customer Username: " + u + "<br>Topic: " + t + "<br>Message: " + m;
-	    	
-	    	out.print("<p>" + displayMessage + "</p>");
+		    	String displayMessage = "Question ID: " + qid + "<br>Customer Username: " + u + "<br>Topic: " + t + "<br>Message: " + m;
+		    	
+		    	out.print("<p>" + displayMessage + "</p>");
+		    }
 	    }
 	    
 	    st.close();
