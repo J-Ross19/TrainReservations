@@ -149,8 +149,7 @@ if(action.equals("add")){ // Add a schedule
 		if(!rs.next()){
 			rs.close();
     		st.close();
-    		out.println("<p>Sorry that reservation number doesnt exist.</p>");
-        	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button>");
+    		out.println("<p>Reservation number doesn't exist or was deleted.</p>");
 		}else{
 			rs.first();
 			String date_made = rs.getString("date_made"), booking_fee =rs.getString("booking_fee"), isMonthly = rs.getString("isMonthly"), 
@@ -168,10 +167,6 @@ if(action.equals("add")){ // Add a schedule
 	    	}else {
 	    		bFeeType = isRoundTrip.equals("1") ? "round" : "single";
 	    		hasRide = true;
-	    	}
-	    	
-	    	if (hasRide) {
-	    		
 	    	}
 	    	
 %>
@@ -204,12 +199,12 @@ if(action.equals("add")){ // Add a schedule
    		f.action = "deleteRide.jsp";
    		f.method = "post";
 
-   		f.innerHTML = '<input type="hidden" name="resID" value="<%out.print(resID);%>"><input type="hidden" name="action" value="edit"><input id="con" type="hidden" name="connNum">';
+   		f.innerHTML = '<input type="hidden" name="connection_number'+(numRows+1)+'"><input type="hidden" name="resID" value="<%out.print(resID);%>"><input type="hidden" name="action" value="edit"><input id="con" type="hidden" name="connNum">';
    		
    		var element = document.getElementById("removals");
    		element.appendChild(f);
    	} else {
-	   cell7.innerHTML = 'N/A';
+	   cell7.innerHTML = '<input type="hidden" name="connection_number'+(numRows+1)+'">N/A';
    	}
 	
    }
@@ -255,6 +250,7 @@ if(action.equals("add")){ // Add a schedule
 	   			document.getElementsByName("seatNumber<%out.print(i);%>")[0].value = <%out.print(seat_number);%>;
 	   			document.getElementsByName("discount<%out.print(i);%>")[0].querySelector('option[value="<%out.print(discount);%>"]').selected = true;
 	   			document.getElementById("deleteRow<%out.print(i);%>").children[2].value = "<%out.print(connection_number);%>";
+	   			document.getElementsByName("connection_number<%out.print(i);%>")[0].value = "<%out.print(connection_number);%>";
 	   <%	}
 			rs2.close();
 			st2.close();
@@ -283,6 +279,7 @@ if(action.equals("add")){ // Add a schedule
     	<option value='round'>Round Trip</option>
     </select>
   	<input type="hidden" name="numRows" value =1>
+  	<input type="hidden" name="reservation_number" value ="<%out.print(resID);%>">
   <br>
      <table name="table">
      <tr>
@@ -317,7 +314,9 @@ if(action.equals("add")){ // Add a schedule
     </select>
     </td>
     <td>
-    	<button type="button" name="remove" onclick="document.forms['deleteRow1'].submit();">Remove</button>
+    	<input type="hidden" name="connection_number1">
+    	<% if (!isMonthly.equals("1") && !isWeekly.equals("1")) { %><button type="button" name="remove" onclick="document.forms['deleteRow1'].submit();">Remove</button>
+    	<% } else { %>N/A<% } %>
     </td>
 	</tr>
      </table>

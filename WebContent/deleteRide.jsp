@@ -23,8 +23,30 @@ String resID = request.getParameter("resID"),action = request.getParameter("acti
 		
 	   	Database db = new Database();
 	   	Connection con = db.getConnection();
+	   	
+	   	// Check if we are deleting just the ride
+	   	int numOldRows = 0;
+	   	Statement findRows = con.createStatement();
+		ResultSet oldRows = findRows.executeQuery("SELECT count(*) AS 'count' FROM Has_Ride_Origin_Destination_PartOf WHERE reservation_number in" 
+				+	" (SELECT reservation_number from Has_Ride_Origin_Destination_PartOf where connection_number = '" + connection_number + "')" 
+				+	" group by reservation_number;");
+		if (oldRows.next()) {
+			numOldRows = Integer.parseInt(oldRows.getString("count"));
+		} else {
+			out.print("ERROR! undefined behavior");
+		}
+	   	oldRows.close();
+	   	findRows.close();
+	   	
+	   	
 	   	Statement st = con.createStatement();
-	   	st.executeUpdate("DELETE FROM Has_Ride_Origin_Destination_PartOf WHERE connection_number='" + connection_number + "'");
+	   	if (numOldRows > 1) {
+	   		st.executeUpdate("DELETE FROM Has_Ride_Origin_Destination_PartOf WHERE connection_number='" + connection_number + "'");
+	   	} else {
+	   		String query = "DELETE FROM Reservation_Portfolio WHERE reservation_number in"
+	   			+	" (SELECT reservation_number from Has_Ride_Origin_Destination_PartOf where connection_number = '" + connection_number + "')";
+	   		st.executeUpdate(query);
+	   	}
 	   	st.close();
 	   	db.closeConnection(con);
 	 %>

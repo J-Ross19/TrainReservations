@@ -114,6 +114,8 @@
 			query += " WHERE train_id = \'" + trainID + "\'";
 		}
 		
+		query += " ORDER BY reservation_number DESC";
+		
 		//Execute query against the database.
 		ResultSet rs = stmt.executeQuery(query);
 		
