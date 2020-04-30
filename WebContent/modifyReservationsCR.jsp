@@ -54,6 +54,7 @@ if(action.equals("add")){ // Add a schedule
 	cell4.innerHTML = "<input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>"
 	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+(numRows+1)+"\"> Seat Number</label>"
 	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none' selected>None of the Above</option></select>"
+	
    }
    
    function updateTable(){
@@ -175,7 +176,7 @@ if(action.equals("add")){ // Add a schedule
 	    	
 %>
 	<script>
-   function addRow(){
+   function addRow(isBegin){
    let numRows = parseInt(document.getElementsByName("numRows")[0].value);
    document.getElementsByName("numRows")[0].value=numRows+1;
 	let table =   document.getElementsByName("table")[0];
@@ -186,7 +187,7 @@ if(action.equals("add")){ // Add a schedule
    var cell4 = row.insertCell(3);
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
-   //var cell7 = row.insertCell(6);
+   var cell7 = row.insertCell(6);
  
 	cell1.innerHTML = "<input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+(numRows+1)+"\"> Transit Line Name</label> ";
 	cell2.innerHTML = "<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>";
@@ -194,7 +195,23 @@ if(action.equals("add")){ // Add a schedule
 	cell4.innerHTML = "<input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>";
 	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+(numRows+1)+"\"> Seat Number</label>";
 	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none'>None of the Above</option></select>";
-	//cell7.innerHTML = "";
+	if (isBegin) {
+		x = "'deleteRow" + (numRows+1) +"'";
+   		cell7.innerHTML = '<button type="button" name="remove" onclick="document.forms[' + x + '].submit();">Remove</button>';
+
+   		var f = document.createElement("form");
+   		f.id = "deleteRow" + (numRows+1);
+   		f.action = "deleteRide.jsp";
+   		f.method = "post";
+
+   		f.innerHTML = '<input type="hidden" name="resID" value="<%out.print(resID);%>"><input type="hidden" name="action" value="edit"><input id="con" type="hidden" name="connNum">';
+   		
+   		var element = document.getElementById("removals");
+   		element.appendChild(f);
+   	} else {
+	   cell7.innerHTML = 'N/A';
+   	}
+	
    }
    
    function updateTable(){
@@ -224,12 +241,12 @@ if(action.equals("add")){ // Add a schedule
 			for (int i = 1; rs2.next(); i++) {
 				String seatClass = rs2.getString("class"), seat_number = rs2.getString("seat_number"), isChildOrSenior = rs2.getString("isChildOrSenior"),
 						isDisabled = rs2.getString("isDisabled"), origin_id = rs2.getString("origin_id"), destination_id = rs2.getString("destination_id"),
-						transit_line_name = rs2.getString("transit_line_name");
+						transit_line_name = rs2.getString("transit_line_name"), connection_number = rs2.getString("connection_number");
 				String discount = isChildOrSenior.equals("1") ? "childSenior" : "none";
 				discount = isDisabled.equals("1") ? "disabled" : discount;
 				if (i > 1) { // If more than one rows, add one
 	   %>
-	   			addRow();
+	   			addRow(true);
 	   			<%}%>
 	   			document.getElementsByName("transitLine<%out.print(i);%>")[0].value = "<%out.print(transit_line_name);%>";
 	   			document.getElementsByName("class<%out.print(i);%>")[0].querySelector('option[value="<%out.print(seatClass);%>"]').selected = true;
@@ -237,6 +254,7 @@ if(action.equals("add")){ // Add a schedule
 	   			document.getElementsByName("destID<%out.print(i);%>")[0].value = <%out.print(destination_id);%>;
 	   			document.getElementsByName("seatNumber<%out.print(i);%>")[0].value = <%out.print(seat_number);%>;
 	   			document.getElementsByName("discount<%out.print(i);%>")[0].querySelector('option[value="<%out.print(discount);%>"]').selected = true;
+	   			document.getElementById("deleteRow<%out.print(i);%>").children[2].value = "<%out.print(connection_number);%>";
 	   <%	}
 			rs2.close();
 			st2.close();
@@ -298,14 +316,25 @@ if(action.equals("add")){ // Add a schedule
     	<option value='none'>None of the Above</option>
     </select>
     </td>
+    <td>
+    	<button type="button" name="remove" onclick="document.forms['deleteRow1'].submit();">Remove</button>
+    </td>
 	</tr>
      </table>
-     <button type="button" name="jkjk" onclick="addRow();">Add Ride</button>
+     <button type="button" name="jkjk" onclick="addRow(false);">Add Ride</button>
      <br><br>
      <button  name="llll" type="submit">Submit</button>
      </form>
    
    	<button onclick="window.location.href='reservations.jsp';">Cancel Reservation</button>
+   	
+   	<span id="removals">
+   		<form id="deleteRow1" action="deleteRide.jsp" method="post">
+   			<input type="hidden" name="resID" value="<%out.print(resID);%>">
+   			<input type="hidden" name="action" value="edit">
+   			<input id='con' type="hidden" name="connNum">
+   		</form>
+   	</span>
     
 		
 <%
