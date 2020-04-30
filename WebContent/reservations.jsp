@@ -53,8 +53,8 @@
     <br/>
     <h4>Modify Reservations:</h4>
    	<form action="modifyReservationsCR.jsp" method="post">
-  		<label for="resNumber">Reservation Number (unnecessary for add):</label>
- 		<input type="text" name="transit">
+  		<label for="resID">Reservation Number (unnecessary for add):</label>
+ 		<input type="text" name="resID">
  		<h5>Action To Perform</h5>
         <input required type="radio" name="action" value="add"/>Add
   		<br/>
@@ -113,6 +113,8 @@
 		} else if (trainID != null) {
 			query += " WHERE train_id = \'" + trainID + "\'";
 		}
+		
+		query += " ORDER BY reservation_number DESC";
 		
 		//Execute query against the database.
 		ResultSet rs = stmt.executeQuery(query);
