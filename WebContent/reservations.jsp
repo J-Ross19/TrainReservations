@@ -100,7 +100,12 @@
 		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
 		String query =  "SELECT R.reservation_number, R.username, C.name_firstname, C.name_lastname,"
 			+	" R.isMonthly, R.isWeekly, R.isRoundTrip, R.date_made, R.booking_fee, FareCalc.totalFare - R.booking_fee AS fare,"
-			+	" H.transit_line_name, S.train_id, H.class, H.seat_number, H.origin_id, H.destination_id"
+			+	" IF(H.transit_line_name is NULL, 'N/A', H.transit_line_name) AS 'transit_line_name',"
+			+	" IF(S.train_id is NULL, 'N/A', S.train_id) AS 'train_id',"
+			+	" IF(H.class is NULL, 'N/A', H.class) AS 'class',"
+			+	" IF(H.seat_number is NULL, 'N/A', H.seat_number) AS 'seat_number',"
+			+	" IF(H.origin_id is NULL, 'N/A', H.origin_id) AS 'idOfOrigin',"
+			+	" IF(H.destination_id is NULL, 'N/A', H.destination_id) AS 'idOfDest'"
 			+	" FROM Customer AS C join Reservation_Portfolio AS R using (username)"
 			+	" left outer join Has_Ride_Origin_Destination_PartOf AS H using (reservation_number)"
 			+	" left outer join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
@@ -222,11 +227,11 @@
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(rs.getString("H.origin_id"));
+			out.print(rs.getString("idOfOrigin"));
 			out.print("</td>");
 			
 			out.print("<td>");
-			out.print(rs.getString("H.destination_id"));
+			out.print(rs.getString("idOfDest"));
 			out.print("</td>");
 			
 			out.print("</tr>");
