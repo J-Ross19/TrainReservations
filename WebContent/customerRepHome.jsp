@@ -1,10 +1,12 @@
+<!-- MADE BY JOSHUA ROSS, DATABASES GROUP 11 -->
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
 <%
-    if ((session.getAttribute("user") == null)) { // Create page for user not logged in
+    if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null)) { // Create page for user not logged in
 %>
 <!DOCTYPE html>
 <html>
@@ -12,7 +14,7 @@
       <title>Train Employee Home</title>
    </head>
    <body>
-   	<p>You are not logged in</p><br/>
+   	<p>You are not logged in or you do not have permissions to access this page</p><br/>
 	<button onclick="window.location.href='login.jsp';">Log in</button>
    </body>
 </html>

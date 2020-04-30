@@ -4,6 +4,23 @@
     pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%
+    if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null)) { // Create page for user not logged in
+%>
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Train Employee Home</title>
+   </head>
+   <body>
+   	<p>You are not logged in or you do not have permissions to access this page</p><br/>
+	<button onclick="window.location.href='login.jsp';">Log in</button>
+   </body>
+</html>
+
+<%
+	} else { // Create page for user that is logged in
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -57,3 +74,6 @@
     %>
    </body>
 </html>
+<%
+}
+%>

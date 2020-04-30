@@ -1,3 +1,5 @@
+<!-- MADE BY JOSHUA ROSS AND RONAK PARIKH, DATABASES GROUP 11 -->
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
@@ -53,6 +55,7 @@
     	st3.close();
     	db.closeConnection(con);
         session.setAttribute("user", userid); // the username will be stored in the session
+        session.setAttribute("employee", userid);
         
         /* Removed in favor of customerRepHome page
         out.println("<p>Logged in as Customer Rep " + userid+".</p>");
@@ -73,6 +76,9 @@
     	st3.close();
     	db.closeConnection(con);
         session.setAttribute("user", userid); // the username will be stored in the session
+        session.setAttribute("employee", userid);
+        session.setAttribute("admin", userid);
+        
         response.sendRedirect("commandcenter.jsp");
     }
     else {
