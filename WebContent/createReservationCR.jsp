@@ -61,7 +61,7 @@ tr:nth-child(even) {
 		//booking_fee = isMonthly==1 ? 1000 : 300;
 		query = "INSERT INTO Reservation_Portfolio(date_made, booking_fee, isMonthly, isWeekly, isRoundTrip, username)"
 				+ " VALUES (\'" + date + "\', \'" + booking_fee
-				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \"" + isMonthly + "\");";
+				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \'" + username + "\')";
 				
 		st.executeUpdate(query);
 		st.close();
@@ -113,7 +113,7 @@ tr:nth-child(even) {
 				stVerify.close();
 				db.closeConnection(con);
 		    	out.println("<p>An error has occurred. Please make sure you enter the transit line and stops correctly</p>");
-		        out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+		        out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerRepHome.jsp';\">Return to Home Page</button>");
 		        fail = 1;
 				break;
 			}
@@ -169,7 +169,7 @@ tr:nth-child(even) {
 	
 	if (fail == 0) {
 		out.println("<h3>Reservation completed successfully! You have been charged $" + booking_fee + "</p>");
-    	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+    	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='customerRepHome.jsp';\">Return to Home Page</button>");
 	}
 	
 	%>

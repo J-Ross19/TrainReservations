@@ -31,7 +31,7 @@
      	<button>Back</button>
 	</form>
 <%
-String resID = request.getParameter("resID"),action = request.getParameter("action"), username="temp";
+String resID = request.getParameter("resID"),action = request.getParameter("action");
 if(action.equals("add")){ // Add a schedule
 %>
 
@@ -48,10 +48,10 @@ if(action.equals("add")){ // Add a schedule
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
  
-	cell1.innerHTML =   " <input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+(numRows+1)+"\"> Transit Line Name</label> ";
-	cell2.innerHTML =  "	<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
-	cell3.innerHTML = " <input required name=\"originID"+(numRows+1)+"\" type=\"number\"/> <label for=\"originID"+(numRows+1)+"\"> Origin Station Id</label>"
-	cell4.innerHTML =	" <input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>"
+	cell1.innerHTML = "<input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+(numRows+1)+"\"> Transit Line Name</label> ";
+	cell2.innerHTML = "<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
+	cell3.innerHTML = "<input required name=\"originID"+(numRows+1)+"\" type=\"number\"/> <label for=\"originID"+(numRows+1)+"\"> Origin Station Id</label>"
+	cell4.innerHTML = "<input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>"
 	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+(numRows+1)+"\"> Seat Number</label>"
 	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none' selected>None of the Above</option></select>"
    }
@@ -63,19 +63,24 @@ if(action.equals("add")){ // Add a schedule
 	   if(document.getElementsByName("bookingFeeType")[0].value=='monthly' || document.getElementsByName("bookingFeeType")[0].value=='weekly'){
 		   y.style.display = "none";
 		   x.style.display = "none";
-		   z.setAttribute("formnovalidate");
+		   z.setAttribute("formnovalidate", "");
+		   //document.getElementsByName("transitLine1")[0].removeAttribute('required');
 	   }else{
 		   y.style.display = "block";
 		   x.style.display = "block";
 		   z.removeAttribute("formnovalidate");
+		   //document.getElementsByName("transitLine1")[0].required = true;
 	   }
 	   
    }
-   
+   window.onload = function() {
+	   updateTable();
+	   document.getElementsByName("transitLine1")[0].required = true;
+	};
    </script>
    
    
-    <form action="createReservationCR.jsp" method="post">
+     <form action="createReservationCR.jsp" method="post">
     <h5>Reservation</h5>
   	<br>
     <label for="userID">For Username:</label>
@@ -83,11 +88,11 @@ if(action.equals("add")){ // Add a schedule
     <label for="bFee">Booking Fee:</label>
     <input type="number" step="0.01" name="bFee" required><br/>
     <label for="bookingFeeType"> Type of Reservation</label>
-  	<select required name="bookingFeeType"  onclick = "updateTable();">
-  		<option value='single' onclick = "updateTable();">One Way Trip</option>
-    	<option value='monthly'onclick = "updateTable();">Monthly Pass</option>
-    	<option value='weekly'onclick = "updateTable();">Weekly Pass</option>
-    	<option value='round'onclick = "updateTable();">Round Trip</option>
+  	<select required name="bookingFeeType"  onchange = "updateTable();">
+  		<option value='single'>One Way Trip</option>
+    	<option value='monthly'>Monthly Pass</option>
+    	<option value='weekly'>Weekly Pass</option>
+    	<option value='round'>Round Trip</option>
     </select>
   	<input type="hidden" name="numRows" value =1>
   <br>
@@ -134,103 +139,174 @@ if(action.equals("add")){ // Add a schedule
    
 
 		
-	<%	
+<%	
 	}else if (action.equals("edit")){
-		 Database db = new Database();
-		    Connection con = db.getConnection();
-		    Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery("SELECT * from Customer where username='" + username + "';");
+		Database db = new Database();
+		Connection con = db.getConnection();
+		Statement st = con.createStatement();
+		ResultSet rs = st.executeQuery("SELECT * from Reservation_Portfolio where reservation_number = '" + resID + "'");
 		if(!rs.next()){
-		rs.close();
-    	st.close();
-    	con.close();
-    	out.println("<p>Sorry that user doesnt exist.</p>");
-        out.println("<button onclick=\"window.location.href='commandcenter.jsp';\">Go Back</button>");
+			rs.close();
+    		st.close();
+    		out.println("<p>Sorry that reservation number doesnt exist.</p>");
+        	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button>");
 		}else{
 			rs.first();
-			String password = rs.getString("password"), email =rs.getString("email"), street = rs.getString("street_address"), city = rs.getString("city"), state = rs.getString("state"), tele = rs.getString("telephone"), zip = rs.getString("zip"), first = rs.getString("name_firstname"), last = rs.getString("name_lastname");
-		
+			String date_made = rs.getString("date_made"), booking_fee =rs.getString("booking_fee"), isMonthly = rs.getString("isMonthly"), 
+					isWeekly = rs.getString("isWeekly"), isRoundTrip = rs.getString("isRoundTrip"), username = rs.getString("username");
+			
 			rs.close();
 	    	st.close();
-	    	con.close();
+	    	
+	    	boolean hasRide = false;
+	    	String bFeeType = "";
+	    	if (isMonthly.equals("1")) {
+	    		bFeeType = "monthly";
+	    	} else if (isWeekly.equals("1")){
+	    		bFeeType = "weekly";
+	    	}else {
+	    		bFeeType = isRoundTrip.equals("1") ? "round" : "single";
+	    		hasRide = true;
+	    	}
+	    	
+	    	if (hasRide) {
+	    		
+	    	}
+	    	
 %>
-		
-		<h3>Update an Account</h3>
-	<form action="adminUpdateCustomer.jsp" method="post">
-    <h5>First Name</h5> <input type="text" name="name_firstname" required value=<%out.println(first); %>>
-    <h5>Last Name</h5> <input type="text" name="name_lastname" required value=<%out.println(last); %>>
-    <h5>Username </h5><input type="text" name="username" required value=<%out.println(username); %> readonly>
-    <h5>Password  </h5><input type="password" name="password" required value=<%out.println(password); %>>
-    <h5>Email </h5><input type="text" name="email" required value=<%out.println(email); %>> <br/>
-    <h5>Street Address </h5> <input type="text" name="street_address" required value=<%out.println(street); %>>
-    <h5> City</h5> <input type="text" name="city" required value=<%out.println(city); %>>
-    <h5>State</h5> <select name="state" required >
-    <option value="AL">Alabama</option>
-    <option value="AK">Alaska</option>
-    <option value="AZ">Arizona</option>
-    <option value="AR">Arkansas</option>
-    <option value="CA">California</option>
-    <option value="CO">Colorado</option>
-    <option value="CT">Connecticut</option>
-    <option value="DE">Delaware</option>
-    <option value="DC">District Of Columbia</option>
-    <option value="FL">Florida</option>
-    <option value="GA">Georgia</option>
-    <option value="HI">Hawaii</option>
-    <option value="ID">Idaho</option>
-    <option value="IL">Illinois</option>
-    <option value="IN">Indiana</option>
-    <option value="IA">Iowa</option>
-    <option value="KS">Kansas</option>
-    <option value="KY">Kentucky</option>
-    <option value="LA">Louisiana</option>
-    <option value="ME">Maine</option>
-    <option value="MD">Maryland</option>
-    <option value="MA">Massachusetts</option>
-    <option value="MI">Michigan</option>
-    <option value="MN">Minnesota</option>
-    <option value="MS">Mississippi</option>
-    <option value="MO">Missouri</option>
-    <option value="MT">Montana</option>
-    <option value="NE">Nebraska</option>
-    <option value="NV">Nevada</option>
-    <option value="NH">New Hampshire</option>
-    <option value="NJ">New Jersey</option>
-    <option value="NM">New Mexico</option>
-    <option value="NY">New York</option>
-    <option value="NC">North Carolina</option>
-    <option value="ND">North Dakota</option>
-    <option value="OH">Ohio</option>
-    <option value="OK">Oklahoma</option>
-    <option value="OR">Oregon</option>
-    <option value="PA">Pennsylvania</option>
-    <option value="RI">Rhode Island</option>
-    <option value="SC">South Carolina</option>
-    <option value="SD">South Dakota</option>
-    <option value="TN">Tennessee</option>
-    <option value="TX">Texas</option>
-    <option value="UT">Utah</option>
-    <option value="VT">Vermont</option>
-    <option value="VA">Virginia</option>
-    <option value="WA">Washington</option>
-    <option value="WV">West Virginia</option>
-    <option value="WI">Wisconsin</option>
-    <option value="WY">Wyoming</option>
-</select>
-<script>
-
-
-function selectElement(id, valueToSelect) {    
-    let element = document.getElementsByName(id)[0];
-    element.value = valueToSelect;
-}
-
-selectElement('state', '<%out.print(state); %>')
-</script>
-    <h5>Zip Code</h5> <input type="text" name="zip" required value=<%out.println(zip); %>>
-    <h5>Phone Number</h5> <input type="text" name="telephone" required value=<%out.println(tele); %>><br/><br><br>
-    <input type="submit" value="Update Account"><br><br><br>
-</form>
+	<script>
+   function addRow(){
+   let numRows = parseInt(document.getElementsByName("numRows")[0].value);
+   document.getElementsByName("numRows")[0].value=numRows+1;
+	let table =   document.getElementsByName("table")[0];
+   var row  = table.insertRow(numRows);
+   var cell1 = row.insertCell(0);
+   var cell2 = row.insertCell(1);
+   var cell3 = row.insertCell(2);
+   var cell4 = row.insertCell(3);
+   var cell5 = row.insertCell(4);
+   var cell6 = row.insertCell(5);
+   //var cell7 = row.insertCell(6);
+ 
+	cell1.innerHTML = "<input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+(numRows+1)+"\"> Transit Line Name</label> ";
+	cell2.innerHTML = "<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>";
+	cell3.innerHTML = "<input required name=\"originID"+(numRows+1)+"\" type=\"number\"/> <label for=\"originID"+(numRows+1)+"\"> Origin Station Id</label>";
+	cell4.innerHTML = "<input required name=\"destID"+(numRows+1)+"\" type=\"number\"/> <label for=\"destID"+(numRows+1)+"\"> Destination Station Id</label>";
+	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+(numRows+1)+"\"> Seat Number</label>";
+	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none'>None of the Above</option></select>";
+	//cell7.innerHTML = "";
+   }
+   
+   function updateTable(){
+	   var x = document.getElementsByName("table")[0];
+	   var y = document.getElementsByName("jkjk")[0];
+	   let z = document.getElementsByName("llll")[0];
+	   if(document.getElementsByName("bookingFeeType")[0].value=='monthly' || document.getElementsByName("bookingFeeType")[0].value=='weekly'){
+		   y.style.display = "none";
+		   x.style.display = "none";
+		   z.setAttribute("formnovalidate", "");
+		   //document.getElementsByName("transitLine1")[0].removeAttribute('required');
+	   }else{
+		   y.style.display = "block";
+		   x.style.display = "block";
+		   z.removeAttribute("formnovalidate");
+		   //document.getElementsByName("transitLine1")[0].required = true;
+	   }
+	   
+   }
+   window.onload = function() {
+	   document.querySelector('option[value="<%out.print(bFeeType);%>"]').selected = true;
+	   <%if (hasRide) {
+		  	Statement st2 = con.createStatement();
+			ResultSet rs2 = st2.executeQuery("SELECT * from Has_Ride_Origin_Destination_PartOf where reservation_number = '" + resID + "'");
+			
+			// Iterate through values for each row
+			for (int i = 1; rs2.next(); i++) {
+				String seatClass = rs2.getString("class"), seat_number = rs2.getString("seat_number"), isChildOrSenior = rs2.getString("isChildOrSenior"),
+						isDisabled = rs2.getString("isDisabled"), origin_id = rs2.getString("origin_id"), destination_id = rs2.getString("destination_id"),
+						transit_line_name = rs2.getString("transit_line_name");
+				String discount = isChildOrSenior.equals("1") ? "childSenior" : "none";
+				discount = isDisabled.equals("1") ? "disabled" : discount;
+				if (i > 1) { // If more than one rows, add one
+	   %>
+	   			addRow();
+	   			<%}%>
+	   			document.getElementsByName("transitLine<%out.print(i);%>")[0].value = "<%out.print(transit_line_name);%>";
+	   			document.getElementsByName("class<%out.print(i);%>")[0].querySelector('option[value="<%out.print(seatClass);%>"]').selected = true;
+	   			document.getElementsByName("originID<%out.print(i);%>")[0].value = <%out.print(origin_id);%>;
+	   			document.getElementsByName("destID<%out.print(i);%>")[0].value = <%out.print(destination_id);%>;
+	   			document.getElementsByName("seatNumber<%out.print(i);%>")[0].value = <%out.print(seat_number);%>;
+	   			document.getElementsByName("discount<%out.print(i);%>")[0].querySelector('option[value="<%out.print(discount);%>"]').selected = true;
+	   <%	}
+			rs2.close();
+			st2.close();
+	   }
+	   db.closeConnection(con);
+	   %>
+	   updateTable();
+	};
+   </script>
+   
+   
+     <form action="updateReservationCR.jsp" method="post">
+    <h5>Reservation</h5>
+  	<br>
+    <label for="userID">For Username:</label>
+    <input required type="text" name="userID" value='<%out.print(username);%>'><br/>
+    <label for="bFee">Booking Fee:</label>
+    <input required type="number" step="0.01" name="bFee" value=<%out.print(booking_fee);%>><br/>
+    <label for="date_made">Date Created (YYYY-MM-DD hh:mm:ss):</label>
+    <input required type="text" name="date_made" value='<%out.print(date_made);%>'><br/>
+    <label for="bookingFeeType">Type of Reservation:</label>
+  	<select required name="bookingFeeType"  onchange="updateTable();">
+  		<option value='single'>One Way Trip</option>
+    	<option value='monthly'>Monthly Pass</option>
+    	<option value='weekly'>Weekly Pass</option>
+    	<option value='round'>Round Trip</option>
+    </select>
+  	<input type="hidden" name="numRows" value =1>
+  <br>
+     <table name="table">
+     <tr>
+     <td>
+	<input required name="transitLine1" type="text"/>
+	<label for="transitLine1"> Transit Line Name</label>
+	</td>
+	<td>
+	<select required name="class1" >
+    <option value='first'>First</option>
+    <option value='business'>Business</option>
+    <option value='economy'>Economy</option>
+    </select>
+    </td>
+    <td>
+        	<input required name="originID1" type="number"/>
+	<label for="originID1"> Origin Station Id</label>
+	</td>
+	<td>
+	    	<input required name="destID1" type="number"/>
+	<label for="destID1"> Destination Station Id</label>
+    </td>
+    <td>
+    	<input required name="seatNumber1" type="number"/>
+	<label for="seatNumber1"> Seat Number</label>
+	</td>
+	<td>
+		<select required name="discount1" >
+    	<option value='childSenior'>Child/Senior</option>
+    	<option value='disabled'>Disabled</option>
+    	<option value='none'>None of the Above</option>
+    </select>
+    </td>
+	</tr>
+     </table>
+     <button type="button" name="jkjk" onclick="addRow();">Add Ride</button>
+     <br><br>
+     <button  name="llll" type="submit">Submit</button>
+     </form>
+   
+   	<button onclick="window.location.href='reservations.jsp';">Cancel Reservation</button>
+    
 		
 <%
 	}
@@ -239,11 +315,11 @@ selectElement('state', '<%out.print(state); %>')
 	Database db = new Database();	
 	Connection con = db.getConnection();
 	Statement st = con.createStatement();
-	st.executeUpdate("delete from Customer where username= \""+ username +"\";");
+	st.executeUpdate("delete from Reservation_Portfolio where reservation_number= \""+ resID +"\";");
 	st.close();
 	db.closeConnection(con);
 	out.println("<p>Deleted</p>");	
-	out.println("<button onclick=\"window.location.href='commandcenter.jsp';\">Go Back</button>");
+	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button>");
 	}
 	
 
