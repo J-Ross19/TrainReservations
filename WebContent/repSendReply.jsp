@@ -30,12 +30,6 @@
 		    Statement st = con.createStatement();
 		    Statement st2 = con.createStatement();
 		    
-		    //ResultSet ssns = st2.executeQuery("SELECT ssn from Employee_Customer_Rep WHERE username='" + uName + "';");
-		    //if (ssns.next())
-		    //{
-		    	//ssn = ssns.getString("ssn");
-		    //}
-		    
 		    String query = "UPDATE Messages SET reply=\"" + newReply + "\", usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
 		    st.executeUpdate(query);
 		    st.close();

@@ -14,7 +14,7 @@
     <%
     	if ((session.getAttribute("user") == null))
     	{
-    		response.sendRedirect("login.jsp");
+    		response.sendRedirect("notFound.jsp");
     	}
 	%>
 	
@@ -63,12 +63,9 @@
     
     <h3>Past Messages:</h3>
     <%
-	    //Database db = new Database();
-	    //Connection con = db.getConnection();
 	    Statement st = con.createStatement();
 	    Statement st2 = con.createStatement();
 	    
-	    //String uName = (String)session.getAttribute("user");
 	    ResultSet rs = st.executeQuery("SELECT * from Messages where username=\'" + uName + "\'");
 	    while(rs.next())
 	    {
