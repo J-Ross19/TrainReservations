@@ -6,6 +6,12 @@
 <html>
 <head>
  <title>Admin Command Center</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+<style>
+body {
+margin: 0 !important;
+}
+</style>
 </head>
 <body>
 <%String username = request.getParameter("username"),type = request.getParameter("type"),action = request.getParameter("action");
