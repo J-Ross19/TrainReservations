@@ -27,6 +27,7 @@ String resID = request.getParameter("resID"),action = request.getParameter("acti
 	   	Connection con = db.getConnection();
 	   	
 	   	// Check if we are deleting just the ride
+	   	out.print(connection_number);
 	   	int numOldRows = 0;
 	   	Statement findRows = con.createStatement();
 		ResultSet oldRows = findRows.executeQuery("SELECT count(*) AS 'count' FROM Has_Ride_Origin_Destination_PartOf WHERE reservation_number in" 

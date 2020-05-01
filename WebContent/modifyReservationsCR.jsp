@@ -188,14 +188,14 @@ if(action.equals("add")){ // Add a schedule
 	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option><option value='none'>None of the Above</option></select>";
 	if (isBegin) {
 		x = "'deleteRow" + (numRows+1) +"'";
-   		cell7.innerHTML = '<button type="button" name="remove" onclick="document.forms[' + x + '].submit();">Remove</button>';
+   		cell7.innerHTML = '<input type="hidden" name="connection_number'+(numRows+1)+'"><button type="button" name="remove" onclick="document.forms[' + x + '].submit();">Remove</button>';
 
    		var f = document.createElement("form");
    		f.id = "deleteRow" + (numRows+1);
    		f.action = "deleteRide.jsp";
    		f.method = "post";
 
-   		f.innerHTML = '<input type="hidden" name="connection_number'+(numRows+1)+'"><input type="hidden" name="resID" value="<%out.print(resID);%>"><input type="hidden" name="action" value="edit"><input id="con" type="hidden" name="connNum">';
+   		f.innerHTML = '<input type="hidden" name="resID" value="<%out.print(resID);%>"><input type="hidden" name="action" value="edit"><input id="con" type="hidden" name="connNum">';
    		
    		var element = document.getElementById("removals");
    		element.appendChild(f);
