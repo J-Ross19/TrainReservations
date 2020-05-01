@@ -91,7 +91,7 @@
 			</form>
 		</section>
 		 
-		<br><br><br>
+		<br><br>
 		<button onclick="window.location.href='customerHome.jsp';">Return to Homepage</button>
 	</body>
 </html>
