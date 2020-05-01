@@ -26,13 +26,14 @@
 		else
 		{
 			String searchTopic = request.getParameter("searchTopic");
+			String searchUser = (String)session.getAttribute("user");
 			
 			Database db = new Database();
 			Connection con = db.getConnection();
 		    Statement st = con.createStatement();
 		    Statement st2 = con.createStatement();
 		    
-		    String query = "SELECT * from Messages where topic LIKE \'%" + searchTopic + "%\'";
+		    String query = "SELECT * from Messages where username = '" + searchUser + "' AND topic LIKE \'%" + searchTopic + "%\'";
 			ResultSet rs = st.executeQuery(query);
 			
 			if(!rs.next())
