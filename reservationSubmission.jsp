@@ -79,15 +79,84 @@
 			discount = request.getParameter("discount" + i);
 			seatingClass = request.getParameter("class" + i);
 			seatNumber = request.getParameter("seatNumber" + i);
-			origID = request.getParameter("originID" + i);
-			destID = request.getParameter("destID" + i);
+			origID = request.getParameter("originId" + i);
+			destID = request.getParameter("destId" + i);
 			transitLine = request.getParameter("transitLine" + i);
 			
+			out.println("<p>Line is " + transitLine + "</p>");
+			out.println("<p>OrigID is " + origID + "</p>");
+			out.println("<p>DestID is " + destID + "</p>");
 			
+			//Check that the line exists
+			Statement stVLine = con.createStatement();
+			String vLineQuery = "SELECT * FROM Schedule_Origin_of_Train_Destination_of_Train_On WHERE transit_line_name = '" + transitLine + "';";
+			ResultSet rsVLine = stVLine.executeQuery(vLineQuery);
+			if (!rsVLine.next()){//Line doesn't exist
+				rsVLine.close();
+				stVLine.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 4;
+				out.println("<p>An error has occurred. Line " + transitLine + " could not be found</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsVLine.close();
+				stVLine.close();
+			}
 			
-			//verify that the transitLine and stops are acceptable
+			if (fail != 0) break;
+			
+			//Check that origin is on the stop
+			Statement stOrig = con.createStatement();
+			String origQuery = "SELECT * FROM "
+					+ " (SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+					+ " UNION"
+					+ " SELECT * FROM Stops_In_Between) AS temp"
+					+ " WHERE transit_line_name = '" + transitLine + "'"
+					+ " and id = '" + origID + "';";
+			ResultSet rsOrig = stOrig.executeQuery(origQuery);
+			if (!rsOrig.next()){//Origin is not on the line
+				rsOrig.close();
+				stOrig.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 5;
+				out.println("<p>An error has occurred. It appears that origin station " + origID + " is not on " + transitLine + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsOrig.close();
+				stOrig.close();
+			}
+			
+			if (fail != 0) break;
+			
+			//Check that Destination is on the stop
+			Statement stDest = con.createStatement();
+			String destQuery = "SELECT * FROM "
+					+ " (SELECT transit_line_name, destination_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+					+ " UNION"
+					+ " SELECT * FROM Stops_In_Between) AS temp"
+					+ " WHERE transit_line_name = '" + transitLine + "'"
+					+ " and id = '" + destID + "';";
+			ResultSet rsDest = stDest.executeQuery(destQuery);
+			if (!rsDest.next()){//Destination is not on the line
+				rsDest.close();
+				stDest.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 6;
+				out.println("<p>An error has occurred. It appears that destination station " + destID + " is not on " + transitLine + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsDest.close();
+				stDest.close();
+			}
+			
+			if (fail != 0) break;
+			
+			//verify that the stops are in order
 			Statement stVerify = con.createStatement(); // No need to verify 
-			String verifyQuery = "SELECT * FROM"
+			String verifyQuery = "SELECT * FROM "
 					+		"(SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
 					+		" UNION"
 					+		" SELECT * FROM Stops_In_Between) AS Temp"
@@ -103,16 +172,21 @@
 					
 			ResultSet originDest = stVerify.executeQuery(verifyQuery);
 			
-			if (!originDest.next()){ //something is wrong, abort
+			if (!originDest.next()){ //Either origId or destID isn't on the right line, or not in right order
 				originDest.close();
 				st.close();
 				stVerify.close();
 				db.closeConnection(con);
-		    	out.println("<p>An error has occurred. Please make sure you enter the transit line and stops correctly</p>");
-		        out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+		    	out.println("<p>An error has occurred. It appears that origin station " + origID + " comes after destination station " + destID + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
 		        fail = 1;
 				break;
+			} else {
+				originDest.close();
+				stVerify.close();
 			}
+			
+			if (fail != 0) break;
 			
 			String seatsQuery = "SELECT transit_line_name,num_seats - count(seat_number) AS 'availSeats'"
 					+	" from Train AS T join Schedule_Origin_of_Train_Destination_of_Train_On AS S on (S.train_id = T.id)"
@@ -123,13 +197,13 @@
 			if (rsSeats.next()){ //something is wrong, abort
 				if (1 > Integer.parseInt(rsSeats.getString("availSeats"))) {
 			    	out.println("<p>An error has occurred. Please make sure there are seats on the line</p>");
-			        out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
 			        fail = 6;
 					break;
 				}
 			} else {
 				out.println("<p>An unknown error has occurred. Please contact a supervisor</p>");
-		        out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
 		        fail = 7;
 		        break;
 			}
@@ -144,10 +218,6 @@
 			if (i != numrows) {
 				rideQuery += ", ";
 			}
-			
-			//close stuff
-			originDest.close();
-			stVerify.close();
 		
 			
 		}
@@ -186,7 +256,7 @@
 	}
 	if (fail == 0) {
 		out.println("<h3>Reservation completed successfully with booking fee $" + booking_fee + "</p>");
-    	out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+    	out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='reservationsCreate.jsp';\">Create Another Reservation</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
 	}
 	
 	%>
