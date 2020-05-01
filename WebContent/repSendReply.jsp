@@ -36,15 +36,22 @@
 		    Statement st = con.createStatement();
 		    Statement st2 = con.createStatement();
 		    
-		    String query = "UPDATE Messages SET reply=\"" + newReply + "\", usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
-		    st.executeUpdate(query);
+		    try
+		    {
+		    	String query = "UPDATE Messages SET reply=\"" + newReply + "\", usernameOfRep=\'" + uName + "\' WHERE messageid= " + qid + ";";
+			    st.executeUpdate(query);
+			    out.println("<h3>Reply sent!</h3>");
+		    }
+		    catch (Exception e)
+		    {
+		    	out.println("No messages with this ID were found.");
+		    }
 		    st.close();
 		    st2.close();
 		    //ssns.close();
 	    	db.closeConnection(con);
 		}
 	%>
-	<h3>Reply sent!</h3>
 	<form action="repMessaging.jsp" method="post">
     	<button>Return to Messaging Dashboard</button>
     </form>

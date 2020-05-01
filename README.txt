@@ -1,9 +1,9 @@
 Group 11 TrainReservations Project
 CS 336 Rutgers University
 
-Group Members: Ronak Parikh (rpp108), Joshua Ross (jjr276), Srija Gottiparthi, Bridget Savage, James Hadley
+Group Members: Ronak Parikh (rpp108), Joshua Ross (jjr276), Srija Gottiparthi (sg1416), Bridget Savage, James Hadley
 
-Project URL:
+Project URL: http://ec2-18-217-84-106.us-east-2.compute.amazonaws.com:8080/FinalProject/
 
 Credentials:
 Here is all the login info for everything in the form (username, password):
