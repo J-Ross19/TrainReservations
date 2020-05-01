@@ -5,9 +5,6 @@
 <!DOCTYPE html>
 
 <html>
-
-
-	<!-- page with all the features -->
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Sort</title>
@@ -54,32 +51,27 @@
 			out.print("<th>Transit Line</td>");
 			out.print("<th>Train ID</td>");
 			out.print("<th>Origin Station</td>");
-			out.print("<th>Origin Departure</td>");
+			out.print("<th>Departure Time</td>");
 			out.print("<th>Destination Station</td>");
-			out.print("<th>Destination Arrival</td>");
+			out.print("<th>Arrival Time</td>");
 			out.print("<th>Total Travel Time</td>");
 			out.print("<th>Regular Fare Cost</td>");
-    	out.print("</tr>");
+    		out.print("</tr>");
     	
 		Database db = new Database();
-	    Connection con = db.getConnection();
+	   	Connection con = db.getConnection();
 	    
-		
-	    // lots of work to find the sort by stuff
+	    	// lots of work to find the sort by stuff
 		String sortHelp = "";
 		String orderHelp = "";
 		
-		if (type.equals("Arrival Time")) {
-		//	sortHelp = "destination_arrival_time";
-			
-			sortHelp = "aDay, aTime";
-		} else if (type.equals("Departure Time ")) {
-		//	sortHelp = "origin_departure_time ";
-			sortHelp = "dDay, dTime";
-
-		} else if (type.equals("Origin ")) {
+		if (type.equals("arrival time")) {
+			sortHelp = "destination_arrival_time";
+		} else if (type.equals("departure time")) {
+			sortHelp = "origin_departure_time ";
+		} else if (type.equals("origin")) {
 			sortHelp = "origin_station_id ";
-		} else if (type.equals("Destination ")) {
+		} else if (type.equals("destination")) {
 			sortHelp = "destination_station_id ";
 		} else {
 			sortHelp = "normal_fare";
@@ -92,8 +84,8 @@
 		} 
 
 
-	    String q1 = "select transit_line_name, SUBSTR(origin_departure_time,0,10) AS dDay, SUBSTR(origin_departure_time,11,21) AS dTime, SUBSTR(destination_arrival_time,0,10) as aDay, SUBSTR(destination_arrival_time,11,21) AS aTime, train_id, origin_station_id, origin_departure_time, destination_station_id, destination_arrival_time, normal_fare, TIMEDIFF(destination_arrival_time,origin_departure_time) AS 'travel' from Schedule_Origin_of_Train_Destination_of_Train_On Order by " + sortHelp + orderHelp;			    
-	    Statement st1 = con.createStatement();
+	    	String q1 = "select transit_line_name, train_id, origin_station_id, origin_departure_time, destination_station_id, destination_arrival_time, normal_fare, TIMEDIFF(destination_arrival_time,origin_departure_time) AS 'travel' from Schedule_Origin_of_Train_Destination_of_Train_On Order by " + sortHelp + orderHelp;			    
+	   	Statement st1 = con.createStatement();
 		ResultSet rs1 = st1.executeQuery(q1);
 
 		while (rs1.next()) {
@@ -135,9 +127,7 @@
 			out.print("</tr>");
 		}
 		
-		
 		out.print("</table>");
-		
 		
 		st1.close();
 		rs1.close();
@@ -145,10 +135,6 @@
 		
 		%>
 		
-		
-		
-		
-	</body>	
-		
+	</body>		
 </html>
 		
