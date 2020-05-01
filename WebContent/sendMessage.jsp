@@ -9,12 +9,18 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Sending message...</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+	<style>
+		body {
+				margin: 0 !important;
+			}
+	</style>
 </head> 
 <body>
 	<%
 		if ((session.getAttribute("user") == null))
 		{
-			response.sendRedirect("login.jsp");
+			response.sendRedirect("notFound.jsp");
 		}
 		else
 		{

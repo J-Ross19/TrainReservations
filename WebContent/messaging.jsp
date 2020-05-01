@@ -8,7 +8,7 @@
 <html>
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Message a Customer Representative</title>
+	<title>Messages & Alerts</title>
 	<link rel="stylesheet"
 		href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
 	<style>
@@ -23,21 +23,7 @@
 		response.sendRedirect("notFound.jsp");
 	}
 	%>
-
-	<h3>Message a Customer Representative</h3>
-	<form action="sendMessage.jsp" method="post">
-		<h5>Message topic:</h5>
-		<input name="topic" type="text">
-		<h5>Message:</h5>
-		<input name="message" type="text" /> <br>
-		<br>
-		<button>Send</button>
-	</form>
-	<form action="customerHome.jsp">
-		<button>Back to Home</button>
-	</form>
-	<h3>A representative will get back to you as soon as possible.</h3>
-	<br>
+	
 	<h3>Alerts:</h3>
 	<%
 		Database db = new Database();
@@ -64,6 +50,28 @@
 	}
 	%>
 
+	<h3>Message a Customer Representative</h3>
+	<form action="sendMessage.jsp" method="post">
+		<h5>Message topic:</h5>
+		<input name="topic" type="text">
+		<h5>Message:</h5>
+		<input name="message" type="text" /> <br>
+		<br>
+		<button>Send</button>
+	</form>
+	<form action="customerHome.jsp">
+		<button>Back to Home</button>
+	</form>
+	<h3>A representative will get back to you as soon as possible.</h3>
+	<br>
+	
+	<h3>Search Messages</h3>
+	<form action="messageSearchResults.jsp" method="post">
+		<h5>Search by Topic:</h5>
+		<input name="searchTopic" type="text"><br>
+		<button>Search</button>
+	</form>
+
 	<h3>Past Messages:</h3>
 	<%
 		Statement st = con.createStatement();
@@ -76,8 +84,7 @@
 		String m = rs.getString("message");
 		String repUser = rs.getString("usernameOfRep");
 		String a = "";
-		ResultSet agents = st2
-		.executeQuery("SELECT name_firstname from Employee_Customer_Rep WHERE username=\'" + repUser + "\';");
+		ResultSet agents = st2.executeQuery("SELECT name_firstname from Employee_Customer_Rep WHERE username=\'" + repUser + "\';");
 		if (agents.next()) {
 			a = agents.getString("name_firstname");
 		}
