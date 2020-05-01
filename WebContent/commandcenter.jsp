@@ -6,21 +6,10 @@
 <html>
    <head>
       <title>Admin Command Center</title>
-      <style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+<style>
+body {
+margin: 0 !important;
 }
 </style>
    </head>
