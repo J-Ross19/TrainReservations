@@ -1,9 +1,9 @@
 <!-- MADE BY JOSHUA ROSS, DATABASES GROUP 11 -->
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
 
 <%
     	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
@@ -34,6 +34,43 @@
 	<form action="schedules.jsp" method="get">
         <button>Access Train Schedules</button>
 	</form>
+	<br/>
+	<h3>Stop List Chart</h3>
+    <%
+    	Database db = new Database();	
+  	 	Connection con = db.getConnection();
+       	Statement st = con.createStatement();
+       	ResultSet rs = st.executeQuery("select * from Station;");
+    	rs.beforeFirst();
+    	
+       out.println("<table><tr><th>Station Number</th><th>Station Name</th><th>State</th><th>City</th></tr>");
+       	while(rs.next()){
+       	out.println("<tr><td> "+rs.getString(1)+"</td><td>"+rs.getString(2)+"</td><td>"+rs.getString(3)+"</td><td>"+rs.getString(4)+"</td></tr>");
+       	}
+       out.println("</table>");
+       
+       rs.close();
+     	st.close();
+     	db.closeConnection(con);
+    %>
+    <h3>List of All Trains</h3>
+		    <%
+    	db = new Database();	
+  	 	con = db.getConnection();
+       	st = con.createStatement();
+       	rs = st.executeQuery("select * from Train;");
+    	rs.beforeFirst();
+    	
+       out.println("<table><tr><th>Train Number</th><th>Number of Seats</th><th>Number of Cars</th></tr>");
+       	while(rs.next()){
+       	out.println("<tr><td> "+rs.getString(1)+"</td><td>"+rs.getString(2)+"</td><td>"+rs.getString(3)+"</td></tr>");
+       	}
+       out.println("</table>");
+       
+       rs.close();
+     	st.close();
+     	db.closeConnection(con);
+    %>
     <br/>
     <form action="logout.jsp" method="get">
         <button>Log Out</button>
