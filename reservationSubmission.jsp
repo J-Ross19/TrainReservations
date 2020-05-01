@@ -83,9 +83,9 @@
 			destID = request.getParameter("destId" + i);
 			transitLine = request.getParameter("transitLine" + i);
 			
-			/*out.println("<p>transitLine" + i + " is " + transitLine + "</p>");
-			out.println("<p>originId" + i + " is " + origID + "</p>");
-			out.println("<p>destId" + i + " is " + destID + "</p>");*/
+			out.println("<p>Line is " + transitLine + "</p>");
+			out.println("<p>OrigID is " + origID + "</p>");
+			out.println("<p>DestID is " + destID + "</p>");
 			
 			//Check that the line exists
 			Statement stVLine = con.createStatement();
