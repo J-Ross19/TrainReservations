@@ -115,6 +115,171 @@
      <br><br>
      <button  name="llll" type="submit">Submit</button>
      </form>
+
+	<h3>List of Train Schedules:</h3>
+
+		<%
+		Database db = new Database();
+		Connection con = db.getConnection();
+		Statement st5 = con.createStatement();
+	
+		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
+		String query5 = "SELECT *, TIMEDIFF(destination_arrival_time,origin_departure_time) AS 'diff', num_seats - count(seat_number) AS 'availSeats'" 
+			+	" from Train AS T join Schedule_Origin_of_Train_Destination_of_Train_On AS S on (S.train_id = T.id)" 
+			+	" left outer join (SELECT DISTINCT transit_line_name, seat_number FROM Has_Ride_Origin_Destination_PartOf) AS Seats using (transit_line_name)";
+		
+		// Query for temporary table containing all stops
+		/*
+		SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On
+		UNION
+		SELECT transit_line_name, destination_station_id AS id, destination_departure_time AS departure_time, destination_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On
+		UNION
+		SELECT * FROM Stops_In_Between
+		ORDER BY transit_line_name, arrival_time;
+		*/
+		
+		// Check if stationID was set
+		String stationID = request.getParameter("stationID");
+		
+		//request.setAttribute("empid", "1234"); ENDJSP
+		String originID = request.getParameter("originID");	
+		String destID = request.getParameter("destID");	
+		
+		// If there is a statioID
+		if (stationID != null) {
+			// search by station id
+			query5 += " WHERE origin_station_id = \'" + stationID + "\' or destination_station_id = \'" + stationID + 
+			"\' or exists (SELECT * from Stops_In_Between AS B WHERE S.transit_line_name = B.transit_line_name and id = \'"+ stationID + "\')";
+		} else if (originID != null && destID != null) {
+			query5 +=
+					" join"
+				+	" (SELECT transit_line_name, origin_station_id AS 'id', origin_departure_time AS 'departure_time', origin_arrival_time AS 'arrival_time' FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+				+	" UNION"
+				+	" SELECT transit_line_name, destination_station_id AS 'id', destination_departure_time AS 'departure_time', destination_arrival_time AS 'arrival_time' FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+				+	" UNION"
+				+	" SELECT * FROM Stops_In_Between"
+				+	" ORDER BY transit_line_name, arrival_time) AS Temp using (transit_line_name)"
+				+	" WHERE Temp.id = \'" + originID + "\'"
+				+	" and Temp.arrival_time < any"
+				+	" (SELECT Temp.arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On AS S2"
+				+	" join"
+				+	" (SELECT transit_line_name, origin_station_id AS 'id', origin_departure_time AS 'departure_time', origin_arrival_time AS 'arrival_time' FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+				+	" UNION"
+				+	" SELECT transit_line_name, destination_station_id AS 'id', destination_departure_time AS 'departure_time', destination_arrival_time AS 'arrival_time' FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+				+	" UNION"
+				+	" SELECT * FROM Stops_In_Between"
+				+	" ORDER BY transit_line_name, arrival_time) AS Temp using (transit_line_name)"
+				+	" WHERE S.transit_line_name = S2.transit_line_name"
+				+	" and Temp.id = \'" + destID + "\')";
+		}
+		
+		query5 += " GROUP BY T.id, transit_line_name";
+		
+		//Execute query against the database.
+		ResultSet rs5 = st5.executeQuery(query5);
+		
+		
+		//Make an HTML table to show the results in:
+		out.print("<table>");
+
+		//make header row
+		out.print("<tr>");
+		
+		//make header columns
+		out.print("<th>Transit Line</td>");
+		out.print("<th>Train ID</td>");
+		out.print("<th>Origin Station</td>");
+		out.print("<th>Destination Station</td>");
+		out.print("<th>Seats Available</td>");
+		out.print("<th>Stops (by Station id)</td>");
+		out.print("<th>Delayed?</td>");
+		out.print("<th>Travel Time</td>");
+		out.print("<th>Regular Fare</td>");
+		out.print("<th>Senior/Child Fare</td>");
+		out.print("<th>Disabled Fare</td>");
+
+    	out.print("</tr>");
+    	
+    	
+		//parse out the results
+		while (rs5.next()) {
+			
+			// Create row of data
+			out.print("<tr>");
+			
+			out.print("<td>");
+			out.print(rs5.getString("transit_line_name"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getInt("train_id"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getInt("origin_station_id"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getInt("destination_station_id"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getInt("availSeats"));
+			out.print("</td>");
+			
+			// List of Stops
+			out.print("<td>");
+			
+			// Create a statement to get all stops
+		    Statement stmt6 = con.createStatement();
+			String stopQuery = "SELECT * FROM Stops_In_Between WHERE transit_line_name = \'" + rs5.getString("transit_line_name") + "\' ORDER BY arrival_time";
+			ResultSet rs6 = stmt6.executeQuery(stopQuery);
+			String listOfStops = "" + rs5.getInt("origin_station_id") + " (Arrives: " + rs5.getString("origin_arrival_time") + " // Departs: " + rs5.getString("origin_departure_time") + ")";
+			while (rs6.next()) {
+				listOfStops += "<br/>" + rs6.getInt("id") + " (Arrives: " + rs6.getString("arrival_time") + " // Departs: " + rs6.getString("departure_time") + ")";
+			}
+			
+			listOfStops += "<br/>" + rs5.getInt("destination_station_id") + " (Arrives: " + rs5.getString("destination_arrival_time") + " // Departs: " + rs5.getString("destination_departure_time") + ")";
+			
+			stmt6.close();
+		    rs6.close();
+		    
+		    out.print(listOfStops);
+		    
+			out.print("</td>");
+			
+			String delayed = rs5.getInt("isDelayed") == 0 ? "No" : "Yes";
+			out.print("<td>");
+			out.print(delayed);
+			out.print("</td>");
+			
+			// Travel time
+			out.print("<td>");
+			out.print(rs5.getString("diff"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getDouble("normal_fare"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getDouble("senior_child_fare"));
+			out.print("</td>");
+			
+			out.print("<td>");
+			out.print(rs5.getDouble("disabled_fare"));
+			out.print("</td>");
+			
+			out.print("</tr>");
+
+		}
+		
+		out.print("</table>");
+		rs5.close();
+		st5.close();
+		db.closeConnection(con);
+   
+		%>
    
    	<button onclick="window.location.href='customerReservations.jsp';">Cancel Reservation</button>
 	
