@@ -13,6 +13,10 @@
 body {
 margin: 0 !important;
 }
+	*{
+ 	max-width: none !important;
+ }
+	
 </style>
 
 </head>
