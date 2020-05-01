@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1" import="main.*"%>
-<%@ page import="java.io.*,java.util.*,java.sql.*"%>
+<%@ page import="java.io.*,java.util.*,java.sql.*, java.text.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <!DOCTYPE html>
 <html>
@@ -14,23 +14,27 @@
 		String redirectURL = "http://localhost:8080/Login/login.jsp";
 		response.sendRedirect(redirectURL);
 	}
-
+	
 	//[reservation_number (PK), date_made, booking_fee, isMonthly, isWeekly,
-//isRoundTrip, username (FK) references Customer not NULL]
+	//isRoundTrip, username (FK) references Customer not NULL]
 
 	
 	//Declaring stuff
 	Database db = new Database();
 	Connection con = db.getConnection();
 	Statement st = con.createStatement();
+	
 
 	double booking_fee = 0;
 	int isMonthly = 0;
 	int isWeekly = 0;
 	int isRoundTrip = 0;
-	String username = (String)session.getAttribute("user");
-	String query = "";
+	String username = (String) session.getAttribute("user");
+	String query;
 	String rideQuery = "";
+	
+	DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	String date = df.format(new java.util.Date());
 	
 	int fail = 0;
 	
@@ -40,17 +44,26 @@
 	if (booking_fee_type.equals("weekly")) isWeekly = 1;
 	if (booking_fee_type.equals("round")) isRoundTrip = 1;
 	
-	//set up query
 	if(isMonthly == 1 || isWeekly == 1){//if it's either of these, set query
-		if (isMonthly == 1) {
-			booking_fee = 1000;
-		} else booking_fee = 300;
+		booking_fee = isMonthly==1 ? 1000 : 300;
 		query = "INSERT INTO Reservation_Portfolio(date_made, booking_fee, isMonthly, isWeekly, isRoundTrip, username)"
-				+ " VALUES (\'" + java.time.LocalDate.now() + "\', \'" + booking_fee
-				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \"" + username + "\");";
+				+ " VALUES (\'" + date + "\', \'" + booking_fee
+				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \"" + username + "\")";
+				
+		//execute
+		st.executeUpdate(query);
+		st.close();
+		db.closeConnection(con);
+		
 	} else {//else, we need to retrieve values for each ride and add them up
 		int numrows = Integer.parseInt(request.getParameter("numRows"));
 		
+		if (isRoundTrip == 1) {
+			booking_fee = 40;
+		} else {
+			booking_fee = 35;
+		}
+			
 		//Values we need to retrieve
 		String discount;
 		String seatingClass;
@@ -59,7 +72,7 @@
 		String destID;
 		String transitLine;
 
-		for (int i = 0; i < numrows; i++){ //for each row		
+		for (int i = 1; i <= numrows; i++){ //for each row		
 			int isChildOrSenior = 0;
 			int isDisabled = 0;
 			double rideFare = 0;
@@ -70,26 +83,102 @@
 			destID = request.getParameter("destId" + i);
 			transitLine = request.getParameter("transitLine" + i);
 			
-			//verify that the transitLine and stops are acceptable
-			Statement stVerify = con.createStatement();
-			String verifyQuery = "SELECT * FROM"
+			/*out.println("<p>transitLine" + i + " is " + transitLine + "</p>");
+			out.println("<p>originId" + i + " is " + origID + "</p>");
+			out.println("<p>destId" + i + " is " + destID + "</p>");*/
+			
+			//Check that the line exists
+			Statement stVLine = con.createStatement();
+			String vLineQuery = "SELECT * FROM Schedule_Origin_of_Train_Destination_of_Train_On WHERE transit_line_name = '" + transitLine + "';";
+			ResultSet rsVLine = stVLine.executeQuery(vLineQuery);
+			if (!rsVLine.next()){//Line doesn't exist
+				rsVLine.close();
+				stVLine.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 4;
+				out.println("<p>An error has occurred. Line " + transitLine + " could not be found</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsVLine.close();
+				stVLine.close();
+			}
+			
+			if (fail != 0) break;
+			
+			//Check that origin is on the stop
+			Statement stOrig = con.createStatement();
+			String origQuery = "SELECT * FROM "
+					+ " (SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+					+ " UNION"
+					+ " SELECT * FROM Stops_In_Between) AS temp"
+					+ " WHERE transit_line_name = '" + transitLine + "'"
+					+ " and id = '" + origID + "';";
+			ResultSet rsOrig = stOrig.executeQuery(origQuery);
+			if (!rsOrig.next()){//Origin is not on the line
+				rsOrig.close();
+				stOrig.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 5;
+				out.println("<p>An error has occurred. It appears that origin station " + origID + " is not on " + transitLine + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsOrig.close();
+				stOrig.close();
+			}
+			
+			if (fail != 0) break;
+			
+			//Check that Destination is on the stop
+			Statement stDest = con.createStatement();
+			String destQuery = "SELECT * FROM "
+					+ " (SELECT transit_line_name, destination_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
+					+ " UNION"
+					+ " SELECT * FROM Stops_In_Between) AS temp"
+					+ " WHERE transit_line_name = '" + transitLine + "'"
+					+ " and id = '" + destID + "';";
+			ResultSet rsDest = stDest.executeQuery(destQuery);
+			if (!rsDest.next()){//Destination is not on the line
+				rsDest.close();
+				stDest.close();
+				st.close();
+				db.closeConnection(con);
+				fail = 6;
+				out.println("<p>An error has occurred. It appears that destination station " + destID + " is not on " + transitLine + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			} else {
+				rsDest.close();
+				stDest.close();
+			}
+			
+			if (fail != 0) break;
+			
+			//verify that the stops are in order
+			Statement stVerify = con.createStatement(); // No need to verify 
+			String verifyQuery = "SELECT * FROM "
 					+		"(SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
 					+		" UNION"
 					+		" SELECT * FROM Stops_In_Between) AS Temp"
 					+		" WHERE transit_line_name = '" + transitLine + "'"
 					+		" and id = '" + origID + "'"
+					+		" and departure_time < any (SELECT arrival_time FROM ("
+					+		" SELECT transit_line_name, destination_station_id AS id, destination_departure_time AS departure_time, destination_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On"
 					+		" UNION"
 					+		" SELECT * FROM Stops_In_Between) AS Temp"
 					+		" WHERE transit_line_name = '" + transitLine + "'"
 					+		" and id = '" + destID + "')";
 			
+					
 			ResultSet originDest = stVerify.executeQuery(verifyQuery);
 			
-			if (!originDest.next()){ //No tuples returned
+			if (!originDest.next()){ //Either origId or destID isn't on the right line, or not in right order
 				originDest.close();
+				st.close();
 				stVerify.close();
-		    	out.println("<p>An error has occurred. Please make sure you enter the transit line and stops correctly</p>");
-		        out.println("<button onclick=\"window.location.href='reservations.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+				db.closeConnection(con);
+		    	out.println("<p>An error has occurred. It appears that origin station " + origID + " comes after destination station " + destID + "</p>");
+		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
 		        fail = 1;
 				break;
 			} else {
@@ -97,44 +186,29 @@
 				stVerify.close();
 			}
 			
-			//set discount values and determine rideFare for this ride
-			String discountQuery = "SELECT ";
-			if(discount.equals("childSenior")){
-				isChildOrSenior = 1;
-				discountQuery += "senior/child_fare AS fee from Schedule_Origin_of_Train_Destination_of_Train_On r "
-						+ "where r.transit_line_name = \"" + transitLine + "\";";
-			} else if (discount.equals("disabled")){
-				isDisabled = 1;
-				discountQuery += "disabled_fare AS fee from Schedule_Origin_of_Train_Destination_of_Train_On r "
-						+ "where r.transit_line_name = \"" + transitLine + "\";";
-			} else {
-				discountQuery += "normal_fare AS fee from Schedule_Origin_of_Train_Destination_of_Train_On r "
-						+ "where r.transit_line_name = \"" + transitLine + "\";";
-			}
+			if (fail != 0) break;
 			
-			Statement stDiscount = con.createStatement();
-			ResultSet discountSet = stDiscount.executeQuery(discountQuery);
-			if(!discountSet.next()){//transitLine doesn't exist
-				discountSet.close();
-				stDiscount.close();
-				fail = 2;
-		    	out.println("<p>An error has occurred. Please make sure you enter the transit line name correctly</p>");
+			String seatsQuery = "SELECT transit_line_name,num_seats - count(seat_number) AS 'availSeats'"
+					+	" from Train AS T join Schedule_Origin_of_Train_Destination_of_Train_On AS S on (S.train_id = T.id)"
+					+	" left outer join (SELECT DISTINCT transit_line_name, seat_number FROM Has_Ride_Origin_Destination_PartOf) AS Seats using (transit_line_name)"
+					+	" where transit_line_name='" + transitLine + "'";
+			Statement stSeats = con.createStatement();
+			ResultSet rsSeats = stSeats.executeQuery(seatsQuery);
+			if (rsSeats.next()){ //something is wrong, abort
+				if (1 > Integer.parseInt(rsSeats.getString("availSeats"))) {
+			    	out.println("<p>An error has occurred. Please make sure there are seats on the line</p>");
+			        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			        fail = 6;
+					break;
+				}
+			} else {
+				out.println("<p>An unknown error has occurred. Please contact a supervisor</p>");
 		        out.println("<button onclick=\"window.location.href='reservationsCreate.jsp';\">Go Back</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
-				break;
-			} else {
-				rideFare = discountSet.getDouble("fee");
-				if (isChildOrSenior == 0 && isDisabled == 0 && isRoundTrip == 1){
-					rideFare = 40;
-				}
-				if(seatingClass.equals("first")) {
-					rideFare *=2;
-				} else if (seatingClass.equals("business")){
-					rideFare *=1.5;
-				}
-				discountSet.close();
-				stDiscount.close();
+		        fail = 7;
+		        break;
 			}
-			
+			rsSeats.close();
+			stSeats.close();
 			
 			//insert into HasRide table
 			rideQuery += "(\'" + origID + "\', \'" + destID
@@ -144,23 +218,22 @@
 			if (i != numrows) {
 				rideQuery += ", ";
 			}
-
-
+		
 			
-			booking_fee += rideFare;
 		}
-	}			
-	
-	//Create Reservation
-	if (fail == 0) {//if it didn't fail 
-		if (isMonthly == 0 && isWeekly == 0){//If not a pass
-
+		
+		if (fail == 0) {
 			query = "INSERT INTO Reservation_Portfolio(date_made, booking_fee, isMonthly, isWeekly, isRoundTrip, username)"
-					+ " VALUES (\'" + java.time.LocalDate.now() + "\', \'" + booking_fee
-					+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \"" + username + "\");";
-
+					+ " VALUES (\'" + date + "\', \'" + booking_fee
+					+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \'" + username + "\')";
+			
+			
+			
+			st.executeUpdate(query);
+			st.close();
+			
 			Statement st2 = con.createStatement();
-			ResultSet rs2 = st2.executeQuery("SELECT reservation_number FROM Reservation_Portfolio WHERE date_made = '" + java.time.LocalDate.now() + "'");
+			ResultSet rs2 = st2.executeQuery("SELECT reservation_number FROM Reservation_Portfolio WHERE date_made = '" + date + "'");
 			String reservation_number = "";
 			if (rs2.next()) {
 				reservation_number = rs2.getString("reservation_number");
@@ -173,22 +246,18 @@
 			rideQuery = "INSERT INTO Has_Ride_Origin_Destination_PartOf(origin_id, destination_id, class, seat_number, isChildOrSenior, isDisabled, transit_line_name, reservation_number)"
 					+ " VALUES " + rideQuery;
 			
-			Statement stHasRide = con.createStatement();
-			out.println("<h3>" + rideQuery + "");
-			stHasRide.executeUpdate(rideQuery);
-			stHasRide.close();
-		}
-		st.executeUpdate(query);
-		out.println("<h3>" + query + "");
-		out.println("<h3>Reservation completed successfully! You have been charged $" + booking_fee + "</p>");  out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+			Statement st3 = con.createStatement();
+			st3.executeUpdate(rideQuery);
+			st3.close();
+			st.close();
+			db.closeConnection(con);
+		} 
 		
 	}
-	st.close();
-	db.closeConnection(con);
-	
-	
-
-  
+	if (fail == 0) {
+		out.println("<h3>Reservation completed successfully with booking fee $" + booking_fee + "</p>");
+    	out.println("<button onclick=\"window.location.href='customerReservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='reservationsCreate.jsp';\">Create Another Reservation</button><br><button onclick=\"window.location.href='customerHome.jsp';\">Return to Home Page</button>");
+	}
 	
 	%>
 	
