@@ -9,7 +9,7 @@
 		<meta charset="ISO-8859-1">
 		<title>Sort</title>
 		<style>
-      		table {
+      			table {
 				width:100%;
 			}
 			table, th, td {
@@ -30,7 +30,13 @@
   				background-color: aqua;
   				color: black;
 			}
-	  </style>
+		</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+			body {
+			margin: 0 !important;
+			}
+		</style>
 	</head>
 	
 	<body>
