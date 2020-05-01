@@ -9,6 +9,12 @@
 <html>
    <head>
       <title>Login</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+		body {
+		margin: 0 !important;
+		}
+		</style>
    </head>
    <body>
      <p>Group 11:  Joshua Ross (jjr276), Ronak Parikh (rpp108), Bridget Savage (bhs46), James Hadley (jwh129), Srija Gottiparthi (sg1416)</p>
@@ -21,7 +27,7 @@
         <br><br>
         <button>Login</button>
     </form>
-    <h3>Dont Have An Account?</h3>
+    <h3>Don't Have An Account?</h3>
     <form action="createPage.jsp" method="post">
 		<button>Create an Account</button>
     </form>
