@@ -6,8 +6,8 @@
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>Train Employee Home</title>
+   	<head>
+	   	<title>Train Employee Home</title>
    </head>
    <body>
    	<%
@@ -16,7 +16,7 @@
     		response.sendRedirect("notFound.jsp");
     	}
 	%>
-   	<p>Logged in as <%=session.getAttribute("user")%></p>
+   	<h2>Logged in as <%=session.getAttribute("user")%></h2><br/>
    	<form action="repMessaging.jsp" method="get">
         <button>Reply to Customer Messages</button>
 	</form>
