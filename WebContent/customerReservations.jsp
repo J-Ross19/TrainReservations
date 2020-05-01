@@ -7,33 +7,12 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Reservations</title>
-<style>
-table {
-	width: 100%;
-}
-
-table, th, td {
-	border: 1px solid black;
-	border-collapse: collapse;
-}
-
-th, td {
-	text-align: center;
-}
-
-table tr:nth-child(even) {
-	background-color: #eee;
-}
-
-table tr:nth-child(odd) {
-	background-color: #fff;
-}
-
-table th {
-	background-color: aqua;
-	color: black;
-}
-</style>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+		body {
+		margin: 0 !important;
+		}
+		</style>
 </head>
 <body>
 
