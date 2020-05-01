@@ -22,7 +22,7 @@
 String transit = request.getParameter("transit"),action = request.getParameter("action");
 if(action.equals( "add")){ // Add a schedule
 %>
-	<h4>Edit Stops:</h4>
+	<h4>Add Stops:</h4>
 	<form action="modifyStops.jsp" method="post">
   		<label for="stop">Transit Line Name:</label>
  		<input type="text" name="transit" value="<%out.println(transit);%>" required>

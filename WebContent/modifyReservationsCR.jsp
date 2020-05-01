@@ -246,8 +246,7 @@ if(action.equals("add")){ // Add a schedule
 	   			document.getElementsByName("seatNumber<%out.print(i);%>")[0].value = <%out.print(seat_number);%>;
 	   			document.getElementsByName("discount<%out.print(i);%>")[0].querySelector('option[value="<%out.print(discount);%>"]').selected = true;
 	   			document.getElementById("deleteRow<%out.print(i);%>").children[2].value = "<%out.print(connection_number);%>";
-	   			document.getElementsByName("connection_number<%out.print(i);%>")[0].value = "<%out.print(connection_number);%>
-		";
+	   			document.getElementsByName("connection_number<%out.print(i);%>")[0].value = "<%out.print(connection_number);%>";
 	<%	}
 			rs2.close();
 			st2.close();
