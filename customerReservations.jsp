@@ -62,113 +62,10 @@ table th {
 		Connection con = db.getConnection();
 	%>
 
-	<h5>Current Reservations</h5>
+	<h5>Current Reservations: Rides</h5>
 	<!-- Should let an individual see which reservations they have made that are pending -->
 	
 	<%
-	
-	//temporary
-		Statement stmt = con.createStatement();
-
-		// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
-		String query = "SELECT * FROM Customer AS C join Reservation_Portfolio AS R using (username)"
-		+ " join Has_Ride_Origin_Destination_PartOf AS H using (reservation_number)"
-		+ " join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
-		+ " join Train AS T on (S.train_id = T.id);";
-
-		//Execute query against the database.
-		ResultSet rs = stmt.executeQuery(query);
-		
-		//Make an HTML table to show the results in:
-		out.print("<table>");
-
-		//make header row
-		out.print("<tr>");
-		//make header columns
-		out.print("<th>Reservation Number</td>");
-		out.print("<th>Username</td>");
-		out.print("<th>Customer Name</td>");
-		out.print("<th>Type of Reservation</td>");
-		out.print("<th>Reservation Created</td>");
-		out.print("<th>Booking Fee</td>");
-		out.print("<th>Transit Line</td>");
-		out.print("<th>Train ID</td>");
-		out.print("<th>Boarding Class</td>");
-		out.print("<th>Seat Number</td>");
-		out.print("<th>Origin Station ID</td>");
-		out.print("<th>Destination Station ID</td>");
-
-		out.print("</tr>");
-	
-		//Add rows
-		while (rs.next()) {
-			// Create row of data
-			out.print("<tr>");
-
-			out.print("<td>");
-			out.print(rs.getInt("reservation_number"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("username"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("name_firstname") + " " + rs.getString("name_lastname"));
-			out.print("</td>");
-
-			// Type of Reservation
-			String typeOfRes = "";
-			if (rs.getInt("isMonthly") == 1) {
-				typeOfRes = "Monthly";
-			} else if (rs.getInt("isWeekly") == 1) {
-				typeOfRes = "Weekly";
-			} else if (rs.getInt("isRoundTrip") == 1) {
-				typeOfRes = "Round Trip";
-			} else {
-				typeOfRes = "Single Ride";
-			}
-			out.print("<td>");
-			out.print(typeOfRes);
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("date_made"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getDouble("booking_fee"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("transit_line_name"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("train_id"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("class"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("seat_number"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("H.origin_id"));
-			out.print("</td>");
-
-			out.print("<td>");
-			out.print(rs.getString("H.destination_id"));
-			out.print("</td>");
-
-			out.print("</tr>");
-		}
-		rs.close();
-		stmt.close();
-	out.print("</table>");
 	
 	/* 
 	* Copied from Ronak's code on the "reservations.jsp" sheet
@@ -288,8 +185,80 @@ table th {
 		
 	}
 	out.print("</table>");
-
+	
 	%>
+	<h5>Current Passes</h5>
+	
+	<%
+	
+	Statement stmtP = con.createStatement();
+
+	String username = (String) session.getAttribute("user");
+	
+	// Make a SELECT query from the table specified by the 'command' parameter at the index.jsp
+	String queryP = "SELECT * FROM Reservation_Portfolio WHERE username = \"" + username + "\";";
+
+	//Execute query against the database.
+	ResultSet rsP = stmtP.executeQuery(queryP);
+	
+	//Make an HTML table to show the results in:
+	out.print("<table>");
+
+	//make header row
+	out.print("<tr>");
+	//make header columns
+	out.print("<th>Reservation Number</td>");
+	out.print("<th>Username</td>");
+	out.print("<th>Type of Reservation</td>");
+	out.print("<th>Reservation Created</td>");
+	out.print("<th>Booking Fee</td>");
+
+	out.print("</tr>");
+
+	//Add rows
+	while (rsP.next()) {
+		
+		// Type of Reservation
+		String typeOfRes = "";
+		if (rsP.getInt("isMonthly") == 1) {
+			typeOfRes = "Monthly";
+		} else if (rsP.getInt("isWeekly") == 1) {
+			typeOfRes = "Weekly";
+		} else {
+			continue;
+		}
+		// Create row of data
+		out.print("<tr>");
+
+		out.print("<td>");
+		out.print(rsP.getInt("reservation_number"));
+		out.print("</td>");
+
+		out.print("<td>");
+		out.print(rsP.getString("username"));
+		out.print("</td>");
+
+
+		out.print("<td>");
+		out.print(typeOfRes);
+		out.print("</td>");
+
+		out.print("<td>");
+		out.print(rsP.getString("date_made"));
+		out.print("</td>");
+
+		out.print("<td>");
+		out.print(rsP.getDouble("booking_fee"));
+		out.print("</td>");
+
+		out.print("</tr>");
+	}
+	rsP.close();
+	stmtP.close();
+	out.print("</table>");
+	
+	%>
+
 
 	<h5>Delete Reservation</h5>
 	
