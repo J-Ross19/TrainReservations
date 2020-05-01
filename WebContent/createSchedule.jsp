@@ -35,7 +35,7 @@
         java.util.Date oD = formatter.parse(originDTime);
         java.util.Date dA = formatter.parse(destATime);
         java.util.Date dD = formatter.parse(destDTime);
-        if (oA.after(oD) || oD.after(dA) && dA.after(dD)) {
+        if (oA.after(oD) || oD.after(dA) || dA.after(dD)) {
         	invalidDate = true;
         }
     } catch (ParseException e) {
