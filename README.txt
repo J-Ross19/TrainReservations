@@ -5,11 +5,19 @@ Group Members: Ronak Parikh (rpp108), Joshua Ross (jjr276), Srija Gottiparthi, B
 
 Project URL:
 
-Amazon EC2 credentials:
+Credentials:
+Here is all the login info for everything in the form (username, password):
+gmail (group11datamanagement@gmail.com,asecurepassword)
+Amazon AWS (group11datamanagement@gmail.com,Asecurepassw0rd) note the 0 and uppercase A
+RDS DB (admin, asecurepassword) the name of the DBMS in the RDS server is group11database
+The URL of the RDS MySQL database is group11database.cyivjxy8m4jv.us-east-2.rds.amazonaws.com on port 3306 and you can do like group11database.cyivjxy8m4jv.us-east-2.rds.amazonaws.com:3306/<Name of Database in MySQL> to access a particular database in the MySQL database server.
+EC2 Webserver keypair name is asecurekey and the actual private key is a file called asecurekey.pem that is attached which was converted into asecureputtykey.ppk which is also attached (you need the putty key to ssh into the EC2 server (probably dont ever need to do that though)).
+The ec2 server public URL is ec2-18-217-84-106.us-east-2.compute.amazonaws.com and it hosts the Apache Tomcat7 webserver. You can ssh into it using putty with the private puttykey file mentioned above in SSH>Auth in the drop down menu on the side when you open putty and with the host name ec2-user@ec2-18-217-84-106.us-east-2.compute.amazonaws.com
+If you go to ec2-18-217-84-106.us-east-2.compute.amazonaws.com:8080 in a browser like chrome, you get to the control panel where you can manage the running Tomcat7 webserver, and if you login with (admin,asecurepassword) on the managerApp button you can deploy war files. To then see the running final app you go to ec2-18-217-84-106.us-east-2.compute.amazonaws.com:8080/<name of app>
 
-Tomcat credentials:
 
-Admin login:
+
+Admin login of website:
   Username: admin
   Password: admin
 
