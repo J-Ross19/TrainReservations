@@ -1,7 +1,7 @@
 Group 11 TrainReservations Project
 CS 336 Rutgers University
 
-Group Members: Ronak Parikh, Joshua Ross (jjr276), Srija Gottiparthi, Bridget Savage, James Hadley
+Group Members: Ronak Parikh (rpp108), Joshua Ross (jjr276), Srija Gottiparthi, Bridget Savage, James Hadley
 
 Project URL:
 
@@ -22,7 +22,7 @@ II. Browsing and search functionality (Bridget)
   [X] sort by different criteria (by arrival time, departure time, origin, destination, fare)
   [X] a user should be able to see all the stops a train will make
 III. Reservations (James)
-  [X] a customer should be able to make a reservation for a specific route
+  [X] a customer should be able to make a reservation for a specific route (Ronak: GUI/Javascript, James: all else)
   [X] get a discount in case of child/senior/disabled
   [X] cancel existing reservation
   [X] view current and past reservations with their details.
@@ -33,18 +33,18 @@ IV. Messaging functions (Srija)
   [X] search questions and answers
   [X] get an alert message in case a route is delayed.
 V. Admin functions (Ronak)
-  [] Admin (create an admin account ahead of time)
-  [] Add, Edit and Delete information for an employee/customer
-  [] Obtain sales reports for a particular month
-  [] Produce a list of reservations:
-  [] by transit line and train number (e.g. NortheastCorridor #3425)
-  [] by customer name
-  [] Produce a listing of revenue per:
-  [] transit line
-  [] destination city
-  [] customer name
-  [] best customer
-  [] best 5 most active transit lines
+  [X] Admin (create an admin account ahead of time)
+  [X] Add, Edit and Delete information for an employee/customer
+  [X] Obtain sales reports for a particular month
+  [X] Produce a list of reservations:
+  [X] by transit line and train number (e.g. NortheastCorridor #3425)
+  [X] by customer name
+  [X] Produce a listing of revenue per:
+  [X] transit line
+  [X] destination city
+  [X] customer name
+  [X] best customer
+  [X] best 5 most active transit lines
 VI. Customer representative: (Joshua)
   [X] Add, Edit and Delete reservations
   [X] Add, Edit and Delete information for train schedules
