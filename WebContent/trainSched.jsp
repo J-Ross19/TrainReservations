@@ -37,9 +37,7 @@
 		<!-- search for train schedules 
 			by origin, destination, date of travel -->
 		<h3>Schedule Search</h3>
-		
-		
-		
+	
 		<% 
 		
 		int originID = Integer.parseInt(request.getParameter("origin"));   
@@ -48,14 +46,14 @@
 		String tDate = dANDt.substring(0,10);
 		
 		
-    	Database db = new Database();
-	    Connection con = db.getConnection();
-	    String q2 = "SELECT a.origin_station_id, a.destination_station_id, a.origin_departure_time, b.name AS oName, c.name AS dName  FROM Schedule_Origin_of_Train_Destination_of_Train_On a, Station b, Station c WHERE a.origin_station_id = \'" + originID + "\' AND a.destination_station_id = \'" + destID + "\' AND  b.id = \'" + originID + "\' AND c.id = \'" + destID + "\'";
-    	Statement st2 = con.createStatement();
+    		Database db = new Database();
+	  	Connection con = db.getConnection();
+	   	String q2 = "SELECT a.origin_station_id, a.destination_station_id, a.origin_departure_time, b.name AS oName, c.name AS dName  FROM Schedule_Origin_of_Train_Destination_of_Train_On a, Station b, Station c WHERE a.origin_station_id = \'" + originID + "\' AND a.destination_station_id = \'" + destID + "\' AND  b.id = \'" + originID + "\' AND c.id = \'" + destID + "\'";
+    		Statement st2 = con.createStatement();
 		ResultSet rs2 = st2.executeQuery(q2);
 		rs2.next();
 		String orName = rs2.getString("oName");
-	    String deName = rs2.getString("dName");
+	   	String deName = rs2.getString("dName");
 	    
 		out.print("Schedule for " + tDate + " from " + orName + " to " + deName);
 		out.print("<br><br>");	
@@ -70,10 +68,10 @@
 			out.print("<th>Destination Station Name</td>");
 			out.print("<th>Date</td>");
 			out.print("<th>Departure Time</td>");
-    	out.print("</tr>");
-	    
-    	String q1 = "SELECT a.origin_station_id, a.destination_station_id, a.origin_departure_time, b.name AS oName, c.name AS dName  FROM Schedule_Origin_of_Train_Destination_of_Train_On a, Station b, Station c WHERE a.origin_station_id = \'" + originID + "\' AND a.destination_station_id = \'" + destID + "\' AND  b.id = \'" + originID + "\' AND c.id = \'" + destID + "\'";
-    	Statement st1 = con.createStatement();
+    		out.print("</tr>");
+		    
+    		String q1 = "SELECT a.origin_station_id, a.destination_station_id, a.origin_departure_time, b.name AS oName, c.name AS dName  FROM Schedule_Origin_of_Train_Destination_of_Train_On a, Station b, Station c WHERE a.origin_station_id = \'" + originID + "\' AND a.destination_station_id = \'" + destID + "\' AND  b.id = \'" + originID + "\' AND c.id = \'" + destID + "\'";
+    		Statement st1 = con.createStatement();
 		ResultSet rs1 = st1.executeQuery(q1);
 		
 		while (rs1.next()){
@@ -110,14 +108,10 @@
 		out.print("</table>");		
 		
 		st1.close();
-	    rs1.close();
-	    st2.close();
-	    rs2.close();
-    	db.closeConnection(con);				
+		rs1.close();
+		st2.close();
+		rs2.close();
+    		db.closeConnection(con);				
 		%>
-		
-		
 	</body>	
-		
 </html>
-		
