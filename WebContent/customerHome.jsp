@@ -23,6 +23,7 @@
    	<p>Welcome <%=session.getAttribute("user")%>!</p>
    	<button onclick="window.location.href='customerReservations.jsp';">Manage Reservations</button>
    	<button onclick="window.location.href='messaging.jsp';">Message customer support</button>
+	<button onclick="window.location.href='browsinghub.jsp';">Browse Trains</button>
 	<button onclick="window.location.href='logout.jsp';">Log Out</button>
 
 
