@@ -135,6 +135,8 @@
 		
 		%>
 		
+		<br><br>
+		<button onclick="window.location.href='browsinghub.jsp';">Return to Browse Home</button>
 	</body>		
 </html>
 		
