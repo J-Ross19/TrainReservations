@@ -10,6 +10,12 @@
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Browse and Search</title>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+		body {
+		margin: 0 !important;
+		}
+		</style>
 	</head>
 	
 	<body>
@@ -28,10 +34,10 @@
   
   				<label for="dest">Destination ID:</label>
   				<input name="dest" type="number"/>
-  				<br>
+  	
 				<label for="tDate">Date of Travel (YYYY-MM-DD):</label>
-				<input name="tDate" type="text"/>				
-				<br>
+				<input name="tDate" type="text"/>	
+				<br>			
 				<button>Search</button>
 			</form>
 		</section>
@@ -65,6 +71,7 @@
 			</form>
 		</section>
 		
+		
 		<!-- train stops -->
 		<section>
 			<!-- a user should be able to see all 
@@ -77,12 +84,14 @@
   
   				<label for="dest">Destination ID:</label>
   				<input name="dest" type="number"/>
-  				<br>
   				<label for="line">Train Line:</label>
 				<input name="line" type="text"/>
-  				<br>
+				<br>
 				<button>Search</button>
 			</form>
 		</section>
+		 
+		<br><br><br>
+		<button onclick="window.location.href='customerHome.jsp';">Return to Homepage</button>
 	</body>
 </html>
