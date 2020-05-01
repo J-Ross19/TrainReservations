@@ -18,9 +18,9 @@ ER Diagram (entire group)
 Schema (Ronak + Joshua)
 I. Create accounts of users; login, logout. (Joshua + Ronak)
 II. Browsing and search functionality (Bridget)
-  [] search for train schedules by origin, destination, date of travel
-  [] sort by different criteria (by arrival time, departure time, origin, destination, fare)
-  [] a user should be able to see all the stops a train will make
+  [X] search for train schedules by origin, destination, date of travel
+  [X] sort by different criteria (by arrival time, departure time, origin, destination, fare)
+  [X] a user should be able to see all the stops a train will make
 III. Reservations (James)
   [] a customer should be able to make a reservation for a specific route
   [] get a discount in case of child/senior/disabled
