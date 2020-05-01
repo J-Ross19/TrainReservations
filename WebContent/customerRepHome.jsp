@@ -16,6 +16,12 @@
 <html>
    	<head>
 	   	<title>Train Employee Home</title>
+	   	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+		body {
+		margin: 0 !important;
+		}
+		</style>
    </head>
    <body>
    	<h2>Logged in as <%=session.getAttribute("user")%></h2><br/>
