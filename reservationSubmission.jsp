@@ -15,7 +15,7 @@
 		response.sendRedirect(redirectURL);
 	}
 	
-	//[reservation_number (PK), date_made, booking_fee, isMonthly, isWeekly,
+	//[reservation_number (PK), _made, booking_fee, isMonthly, isWeekly,
 	//isRoundTrip, username (FK) references Customer not NULL]
 
 	
@@ -83,9 +83,9 @@
 			destID = request.getParameter("destId" + i);
 			transitLine = request.getParameter("transitLine" + i);
 			
-			out.println("<p>Line is " + transitLine + "</p>");
-			out.println("<p>OrigID is " + origID + "</p>");
-			out.println("<p>DestID is " + destID + "</p>");
+			/*out.println("<p>transitLine" + i + " is " + transitLine + "</p>");
+			out.println("<p>originId" + i + " is " + origID + "</p>");
+			out.println("<p>destId" + i + " is " + destID + "</p>");*/
 			
 			//Check that the line exists
 			Statement stVLine = con.createStatement();
