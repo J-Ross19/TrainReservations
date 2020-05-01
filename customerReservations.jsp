@@ -88,7 +88,7 @@ table th {
 			+ " join Schedule_Origin_of_Train_Destination_of_Train_On AS S using (transit_line_name)"
 			+ " join Train AS T on (S.train_id = T.id)"
 			+ " WHERE username = \"" + username + "\""
-			+ " AND origin_arrival_time > \'" + date1 + "\';";
+			+ " AND origin_arrival_time >= \'" + date1 + "\';";
 	
 			//Execute query against the database.
 			ResultSet rs1 = stmt1.executeQuery(query1);
