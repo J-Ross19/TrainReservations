@@ -65,7 +65,6 @@
 			</form>
 		</section>
 		
-		
 		<!-- train stops -->
 		<section>
 			<!-- a user should be able to see all 
@@ -86,5 +85,4 @@
 			</form>
 		</section>
 	</body>
-
 </html>
