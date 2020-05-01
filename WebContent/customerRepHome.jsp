@@ -4,18 +4,20 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+
+<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+%>
+
 <!DOCTYPE html>
 <html>
    	<head>
 	   	<title>Train Employee Home</title>
    </head>
    <body>
-   	<%
-    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
-    	{
-    		response.sendRedirect("notFound.jsp");
-    	}
-	%>
    	<h2>Logged in as <%=session.getAttribute("user")%></h2><br/>
    	<form action="repMessaging.jsp" method="get">
         <button>Reply to Customer Messages</button>

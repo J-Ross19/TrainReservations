@@ -5,6 +5,13 @@
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 
+<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+%>
+	
 <!DOCTYPE html>
 <html>
    <head>
@@ -34,12 +41,6 @@
 	  </style>
    </head>
    <body>
-   	<%
-    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
-    	{
-    		response.sendRedirect("notFound.jsp");
-    	}
-	%>
    	<form action="customerRepHome.jsp" method="get">
         <button>Home</button>
 	</form>

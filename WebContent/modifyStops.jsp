@@ -4,19 +4,18 @@
     pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*" %>
-
+<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
  <title>Stop Modification</title>
 </head>
 <body>
-	<%
-    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
-    	{
-    		response.sendRedirect("notFound.jsp");
-    	}
-	%>
 <%
 String transit = request.getParameter("transit"), stationID=request.getParameter("stationID"), action = request.getParameter("action");
 if(action.equals("add")){ // Add a schedule

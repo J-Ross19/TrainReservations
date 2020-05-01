@@ -4,6 +4,12 @@
 	pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
+<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,12 +35,6 @@ tr:nth-child(even) {
 </style>
 </head>
 <body>
-	<%
-    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
-    	{
-    		response.sendRedirect("notFound.jsp");
-    	}
-	%>
 	
 	<form action="reservations.jsp" method="get">
 		<button>Back</button>
