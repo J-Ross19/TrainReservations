@@ -15,7 +15,7 @@
 		response.sendRedirect(redirectURL);
 	}
 	
-	//[reservation_number (PK), date_made, booking_fee, isMonthly, isWeekly,
+	//[reservation_number (PK), _made, booking_fee, isMonthly, isWeekly,
 	//isRoundTrip, username (FK) references Customer not NULL]
 
 	

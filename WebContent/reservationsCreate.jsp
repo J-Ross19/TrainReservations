@@ -46,12 +46,12 @@ tr:nth-child(even) {
    var cell5 = row.insertCell(4);
    var cell6 = row.insertCell(5);
  
-	cell1.innerHTML =   " <input required name=\"transitLine"+numRows+1+"\" type=\"text\"/> <label for=\"transitLine"+numRows+1+"\"> Transit Line Name</label> ";
-	cell2.innerHTML =  "	<select required name=\"class"+numRows+1+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
-	cell3.innerHTML = " <input required name=\"originId"+numRows+1+"\" type=\"number\"/> <label for=\"originId"+numRows+1+"\"> Origin Station Id</label>"
-	cell4.innerHTML =	" <input required name=\"destId"+numRows+1+"\" type=\"number\"/> <label for=\"destId"+numRows+1+"\"> Destination Station Id</label>"
-	cell5.innerHTML = "<input required name=\"seatNumber"+numRows+1+"\" type=\"number\"/> <label for=\"seatNumber"+numRows+1+"\"> Seat Number</label>"
-	cell6.innerHTML = "<select required name=\"discount"+numRows+1+"\" ><option value='none'>None of the Above</option><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option></select>"
+	cell1.innerHTML =   " <input required name=\"transitLine"+(numRows+1)+"\" type=\"text\"/> <label for=\"transitLine"+numRows+1+"\"> Transit Line Name</label> ";
+	cell2.innerHTML =  "	<select required name=\"class"+(numRows+1)+"\" > <option value='first'>First</option> <option value='business'>Business</option> <option value='economy'>Economy</option> </select>"
+	cell3.innerHTML = " <input required name=\"originId"+(numRows+1)+"\" type=\"number\"/> <label for=\"originId"+numRows+1+"\"> Origin Station Id</label>"
+	cell4.innerHTML =	" <input required name=\"destId"+(numRows+1)+"\" type=\"number\"/> <label for=\"destId"+numRows+1+"\"> Destination Station Id</label>"
+	cell5.innerHTML = "<input required name=\"seatNumber"+(numRows+1)+"\" type=\"number\"/> <label for=\"seatNumber"+numRows+1+"\"> Seat Number</label>"
+	cell6.innerHTML = "<select required name=\"discount"+(numRows+1)+"\" ><option value='none'>None of the Above</option><option value='childSenior'>Child/Senior</option><option value='disabled'>Disabled</option></select>"
    }
    
    function updateTable(){
@@ -107,7 +107,7 @@ tr:nth-child(even) {
 	</td>
 	<td>
 	    	<input required name="destId1" type="number"/>
-	<label for="destId1"> Destination Station Id</label>
+	<label for="destId1"> Destination Station Id</label>	
     </td>
     <td>
     	<input required name="seatNumber1" type="number"/>
