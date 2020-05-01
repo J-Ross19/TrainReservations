@@ -12,9 +12,9 @@
 </head> 
 <body>
 	<%
-		if ((session.getAttribute("user") == null))
+		if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
 		{
-			response.sendRedirect("login.jsp");
+			response.sendRedirect("notFound.jsp");
 		}
 		else
 		{

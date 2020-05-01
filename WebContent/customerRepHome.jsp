@@ -4,30 +4,18 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
 <%@ page import="javax.servlet.http.*,javax.servlet.*"%>
-
-<%
-    if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null)) { // Create page for user not logged in
-%>
 <!DOCTYPE html>
 <html>
    <head>
       <title>Train Employee Home</title>
    </head>
    <body>
-   	<p>You are not logged in or you do not have permissions to access this page</p><br/>
-	<button onclick="window.location.href='login.jsp';">Log in</button>
-   </body>
-</html>
-
-<%
-	} else { // Create page for user that is logged in
-%>
-<!DOCTYPE html>
-<html>
-   <head>
-      <title>Train Employee Home</title>
-   </head>
-   <body>
+   	<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+	%>
    	<p>Logged in as <%=session.getAttribute("user")%></p>
    	<form action="repMessaging.jsp" method="get">
         <button>Reply to Customer Messages</button>
@@ -45,6 +33,3 @@
 
    </body>
 </html>
-<%
-    }
-%>

@@ -1,60 +1,50 @@
 <!-- MADE BY JOSHUA ROSS, DATABASES GROUP 11 -->
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1" import="main.*"%>
+	pageEncoding="ISO-8859-1" import="main.*"%>
 <%@ page import="java.io.*,java.util.*,java.sql.*"%>
-<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
-<%
-    if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null)) { // Create page for user not logged in
-%>
-<!DOCTYPE html>
-<html>
-   <head>
-      <title>Train Employee Home</title>
-   </head>
-   <body>
-   	<p>You are not logged in or you do not have permissions to access this page</p><br/>
-	<button onclick="window.location.href='login.jsp';">Log in</button>
-   </body>
-</html>
-
-<%
-	} else { // Create page for user that is logged in
-%>
+<%@ page import="javax.servlet.http.*,javax.servlet.*"%>
 <!DOCTYPE html>
 <html>
 <head>
- <title>Train Schedule Modification</title>
- <style>
-	table {
-  		font-family: arial, sans-serif;
-  		border-collapse: collapse;
-  		white-space: nowrap;
-	}
+<title>Train Schedule Modification</title>
+<style>
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	white-space: nowrap;
+}
 
-	td, th {
-		font-family: arial, sans-serif;
-		font-size: 6pt;
-  		border: 1px solid #dddddd;
-  		text-align: left;
-  		padding: 8px;
-	}
+td, th {
+	font-family: arial, sans-serif;
+	font-size: 6pt;
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
 
-	tr:nth-child(even) {
-  		background-color: #dddddd;
-	}
-  </style>
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+</style>
 </head>
 <body>
+	<%
+    	if ((session.getAttribute("user") == null) || (session.getAttribute("employee") == null))
+    	{
+    		response.sendRedirect("notFound.jsp");
+    	}
+	%>
+	
 	<form action="reservations.jsp" method="get">
-     	<button>Back</button>
+		<button>Back</button>
 	</form>
-<%
+	<%
 String resID = request.getParameter("resID"),action = request.getParameter("action");
 if(action.equals("add")){ // Add a schedule
 %>
 
-  <script>
+	<script>
    function addRow(){
    let numRows = parseInt(document.getElementsByName("numRows")[0].value);
    document.getElementsByName("numRows")[0].value=numRows+1;
@@ -98,68 +88,55 @@ if(action.equals("add")){ // Add a schedule
 	   document.getElementsByName("transitLine1")[0].required = true;
 	};
    </script>
-   
-   
-     <form action="createReservationCR.jsp" method="post">
-    <h5>Reservation</h5>
-  	<br>
-    <label for="userID">For Username:</label>
-    <input type="text" name="userID" required><br/>
-    <label for="bFee">Booking Fee:</label>
-    <input type="number" step="0.01" name="bFee" required><br/>
-    <label for="bookingFeeType"> Type of Reservation</label>
-  	<select required name="bookingFeeType"  onchange = "updateTable();">
-  		<option value='single'>One Way Trip</option>
-    	<option value='monthly'>Monthly Pass</option>
-    	<option value='weekly'>Weekly Pass</option>
-    	<option value='round'>Round Trip</option>
-    </select>
-  	<input type="hidden" name="numRows" value =1>
-  <br>
-     <table name="table">
-     <tr>
-     <td>
-	<input required name="transitLine1" type="text"/>
-	<label for="transitLine1"> Transit Line Name</label>
-	</td>
-	<td>
-	<select required name="class1" >
-    <option value='first'>First</option>
-    <option value='business'>Business</option>
-    <option value='economy'>Economy</option>
-    </select>
-    </td>
-    <td>
-        	<input required name="originID1" type="number"/>
-	<label for="originID1"> Origin Station Id</label>
-	</td>
-	<td>
-	    	<input required name="destID1" type="number"/>
-	<label for="destID1"> Destination Station Id</label>
-    </td>
-    <td>
-    	<input required name="seatNumber1" type="number"/>
-	<label for="seatNumber1"> Seat Number</label>
-	</td>
-	<td>
-		<select required name="discount1" >
-    	<option value='childSenior'>Child/Senior</option>
-    	<option value='disabled'>Disabled</option>
-    	<option value='none' selected>None of the Above</option>
-    </select>
-    </td>
-	</tr>
-     </table>
-     <button type="button" name="jkjk" onclick="addRow();">Add Ride</button>
-     <br><br>
-     <button  name="llll" type="submit">Submit</button>
-     </form>
-   
-   	<button onclick="window.location.href='reservations.jsp';">Cancel Reservation</button>
-   
 
-		
-<%	
+
+	<form action="createReservationCR.jsp" method="post">
+		<h5>Reservation</h5>
+		<br> <label for="userID">For Username:</label> <input type="text"
+			name="userID" required><br /> <label for="bFee">Booking
+			Fee:</label> <input type="number" step="0.01" name="bFee" required><br />
+		<label for="bookingFeeType"> Type of Reservation</label> <select
+			required name="bookingFeeType" onchange="updateTable();">
+			<option value='single'>One Way Trip</option>
+			<option value='monthly'>Monthly Pass</option>
+			<option value='weekly'>Weekly Pass</option>
+			<option value='round'>Round Trip</option>
+		</select> <input type="hidden" name="numRows" value=1> <br>
+		<table name="table">
+			<tr>
+				<td><input required name="transitLine1" type="text" /> <label
+					for="transitLine1"> Transit Line Name</label></td>
+				<td><select required name="class1">
+						<option value='first'>First</option>
+						<option value='business'>Business</option>
+						<option value='economy'>Economy</option>
+				</select></td>
+				<td><input required name="originID1" type="number" /> <label
+					for="originID1"> Origin Station Id</label></td>
+				<td><input required name="destID1" type="number" /> <label
+					for="destID1"> Destination Station Id</label></td>
+				<td><input required name="seatNumber1" type="number" /> <label
+					for="seatNumber1"> Seat Number</label></td>
+				<td><select required name="discount1">
+						<option value='childSenior'>Child/Senior</option>
+						<option value='disabled'>Disabled</option>
+						<option value='none' selected>None of the Above</option>
+				</select></td>
+			</tr>
+		</table>
+		<button type="button" name="jkjk" onclick="addRow();">Add
+			Ride</button>
+		<br>
+		<br>
+		<button name="llll" type="submit">Submit</button>
+	</form>
+
+	<button onclick="window.location.href='reservations.jsp';">Cancel
+		Reservation</button>
+
+
+
+	<%	
 	}else if (action.equals("edit")){
 		Database db = new Database();
 		Connection con = db.getConnection();
@@ -269,93 +246,83 @@ if(action.equals("add")){ // Add a schedule
 	   			document.getElementsByName("seatNumber<%out.print(i);%>")[0].value = <%out.print(seat_number);%>;
 	   			document.getElementsByName("discount<%out.print(i);%>")[0].querySelector('option[value="<%out.print(discount);%>"]').selected = true;
 	   			document.getElementById("deleteRow<%out.print(i);%>").children[2].value = "<%out.print(connection_number);%>";
-	   			document.getElementsByName("connection_number<%out.print(i);%>")[0].value = "<%out.print(connection_number);%>";
-	   <%	}
+	   			document.getElementsByName("connection_number<%out.print(i);%>")[0].value = "<%out.print(connection_number);%>
+		";
+	<%	}
 			rs2.close();
 			st2.close();
 	   }
 	   db.closeConnection(con);
 	   %>
-	   updateTable();
-	};
-   </script>
-   
-   
-     <form action="updateReservationCR.jsp" method="post">
-    <h5>Reservation</h5>
-  	<br>
-    <label for="userID">For Username:</label>
-    <input required type="text" name="userID" value='<%out.print(username);%>'><br/>
-    <label for="bFee">Booking Fee:</label>
-    <input required type="number" step="0.01" name="bFee" value=<%out.print(booking_fee);%>><br/>
-    <label for="date_made">Date Created (YYYY-MM-DD hh:mm:ss):</label>
-    <input required type="text" name="date_made" value='<%out.print(date_made);%>'><br/>
-    <label for="bookingFeeType">Type of Reservation:</label>
-  	<select required name="bookingFeeType"  onchange="updateTable();">
-  		<option value='single'>One Way Trip</option>
-    	<option value='monthly'>Monthly Pass</option>
-    	<option value='weekly'>Weekly Pass</option>
-    	<option value='round'>Round Trip</option>
-    </select>
-  	<input type="hidden" name="numRows" value =1>
-  	<input type="hidden" name="reservation_number" value ="<%out.print(resID);%>">
-  <br>
-     <table name="table">
-     <tr>
-     <td>
-	<input required name="transitLine1" type="text"/>
-	<label for="transitLine1"> Transit Line Name</label>
-	</td>
-	<td>
-	<select required name="class1" >
-    <option value='first'>First</option>
-    <option value='business'>Business</option>
-    <option value='economy'>Economy</option>
-    </select>
-    </td>
-    <td>
-        	<input required name="originID1" type="number"/>
-	<label for="originID1"> Origin Station Id</label>
-	</td>
-	<td>
-	    	<input required name="destID1" type="number"/>
-	<label for="destID1"> Destination Station Id</label>
-    </td>
-    <td>
-    	<input required name="seatNumber1" type="number"/>
-	<label for="seatNumber1"> Seat Number</label>
-	</td>
-	<td>
-		<select required name="discount1" >
-    	<option value='childSenior'>Child/Senior</option>
-    	<option value='disabled'>Disabled</option>
-    	<option value='none'>None of the Above</option>
-    </select>
-    </td>
-    <td>
-    	<input type="hidden" name="connection_number1">
-    	<% if (!isMonthly.equals("1") && !isWeekly.equals("1")) { %><button type="button" name="remove" onclick="document.forms['deleteRow1'].submit();">Remove</button>
-    	<% } else { %>N/A<% } %>
-    </td>
-	</tr>
-     </table>
-     <button type="button" name="jkjk" onclick="addRow(false);">Add Ride</button>
-     <br><br>
-     <button  name="llll" type="submit">Submit</button>
-     </form>
-   
-   	<button onclick="window.location.href='reservations.jsp';">Cancel Reservation</button>
-   	
-   	<span id="removals">
-   		<form id="deleteRow1" action="deleteRide.jsp" method="post">
-   			<input type="hidden" name="resID" value="<%out.print(resID);%>">
-   			<input type="hidden" name="action" value="edit">
-   			<input id='con' type="hidden" name="connNum">
-   		</form>
-   	</span>
-    
-		
-<%
+		updateTable();
+		};
+	</script>
+
+
+	<form action="updateReservationCR.jsp" method="post">
+		<h5>Reservation</h5>
+		<br> <label for="userID">For Username:</label> <input required
+			type="text" name="userID" value='<%out.print(username);%>'><br />
+		<label for="bFee">Booking Fee:</label> <input required type="number"
+			step="0.01" name="bFee" value=<%out.print(booking_fee);%>><br />
+		<label for="date_made">Date Created (YYYY-MM-DD hh:mm:ss):</label> <input
+			required type="text" name="date_made"
+			value='<%out.print(date_made);%>'><br /> <label
+			for="bookingFeeType">Type of Reservation:</label> <select required
+			name="bookingFeeType" onchange="updateTable();">
+			<option value='single'>One Way Trip</option>
+			<option value='monthly'>Monthly Pass</option>
+			<option value='weekly'>Weekly Pass</option>
+			<option value='round'>Round Trip</option>
+		</select> <input type="hidden" name="numRows" value=1> <input
+			type="hidden" name="reservation_number" value="<%out.print(resID);%>">
+		<br>
+		<table name="table">
+			<tr>
+				<td><input required name="transitLine1" type="text" /> <label
+					for="transitLine1"> Transit Line Name</label></td>
+				<td><select required name="class1">
+						<option value='first'>First</option>
+						<option value='business'>Business</option>
+						<option value='economy'>Economy</option>
+				</select></td>
+				<td><input required name="originID1" type="number" /> <label
+					for="originID1"> Origin Station Id</label></td>
+				<td><input required name="destID1" type="number" /> <label
+					for="destID1"> Destination Station Id</label></td>
+				<td><input required name="seatNumber1" type="number" /> <label
+					for="seatNumber1"> Seat Number</label></td>
+				<td><select required name="discount1">
+						<option value='childSenior'>Child/Senior</option>
+						<option value='disabled'>Disabled</option>
+						<option value='none'>None of the Above</option>
+				</select></td>
+				<td><input type="hidden" name="connection_number1"> <% if (!isMonthly.equals("1") && !isWeekly.equals("1")) { %><button
+						type="button" name="remove"
+						onclick="document.forms['deleteRow1'].submit();">Remove</button> <% } else { %>N/A<% } %>
+				</td>
+			</tr>
+		</table>
+		<button type="button" name="jkjk" onclick="addRow(false);">Add
+			Ride</button>
+		<br>
+		<br>
+		<button name="llll" type="submit">Submit</button>
+	</form>
+
+	<button onclick="window.location.href='reservations.jsp';">Cancel
+		Reservation</button>
+
+	<span id="removals">
+		<form id="deleteRow1" action="deleteRide.jsp" method="post">
+			<input type="hidden" name="resID" value="<%out.print(resID);%>">
+			<input type="hidden" name="action" value="edit"> <input
+				id='con' type="hidden" name="connNum">
+		</form>
+	</span>
+
+
+	<%
 	}
 		
 }else{
@@ -375,6 +342,3 @@ if(action.equals("add")){ // Add a schedule
 %>
 </body>
 </html>
-<%
-	}
-%>
