@@ -204,7 +204,7 @@ tr:nth-child(even) {
 		}			
 	}
 	if (fail == 0) {
-		out.println("<h3>Reservation completed successfully with booking fee $" + booking_fee + "</p>");
+		out.println("<h3>Reservation completed successfully</h3>");
     	out.println("<button onclick=\"window.location.href='reservations.jsp';\">Back to Reservations</button><br><button onclick=\"window.location.href='customerRepHome.jsp';\">Return to Home Page</button>");
 	}
 	

@@ -43,7 +43,7 @@
     }
     
     if (invalidDate) {
-    	out.println("<p>Sorry that date is in an invalid format.</p>");
+    	out.println("<p>Sorry that date is in an invalid format or invalid timing</p>");
         out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
     }
     else {
@@ -60,7 +60,7 @@
     	ResultSet rs6 = st6.executeQuery("SELECT * from Station where id ='" + originID + "';");
     	ResultSet rs7 = st7.executeQuery("SELECT * from Station where id ='" + destID + "';");
     	ResultSet rs8 = st8.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = '" + transit + "' and ('" + originDTime + "' > arrival_time or '" + destATime + "' < departure_time)");
-    	if (rs.next()||transit==null||fare==null||scFare==null||dFare==null||!rs5.next()||!rs6.next()||!rs7.next()||rs8.next()) {
+    	if (rs.next()||transit==null||fare==null||scFare==null||dFare==null) {
     		rs.close();
     		st.close();
     		rs5.close();
@@ -72,9 +72,51 @@
     		st7.close();
     		st8.close();
     		db.closeConnection(con);
-    		out.println("<p>Sorry, Transit Line already exists or Invalid Train ID or Station IDs or Timings</p>");
+    		out.println("<p>Sorry, Transit Line already exists or fields not set</p>");
         	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
               
+    	} else if (!rs5.next()) {
+    		rs.close();
+    		st.close();
+    		rs5.close();
+    		rs6.close();
+    		rs7.close();
+    		rs8.close();
+    		st5.close();
+    		st6.close();
+    		st7.close();
+    		st8.close();
+    		db.closeConnection(con);
+    		out.println("<p>Sorry, Invalid Train ID</p>");
+        	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
+    	} else if (!rs6.next()||!rs7.next()) {
+    		rs.close();
+    		st.close();
+    		rs5.close();
+    		rs6.close();
+    		rs7.close();
+    		rs8.close();
+    		st5.close();
+    		st6.close();
+    		st7.close();
+    		st8.close();
+    		db.closeConnection(con);
+    		out.println("<p>Sorry, Invalid Station IDs</p>");
+        	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
+    	} else if (rs8.next()) {
+    		rs.close();
+    		st.close();
+    		rs5.close();
+    		rs6.close();
+    		rs7.close();
+    		rs8.close();
+    		st5.close();
+    		st6.close();
+    		st7.close();
+    		st8.close();
+    		db.closeConnection(con);
+    		out.println("<p>Sorry, the stops in between do not match the origin and destination</p>");
+        	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
     	} else {
     		Statement st2=con.createStatement();
     		String query = "INSERT INTO Schedule_Origin_of_Train_Destination_of_Train_On(transit_line_name, isDelayed, normal_fare, senior_child_fare, disabled_fare, destination_arrival_time, destination_departure_time, origin_arrival_time, origin_departure_time, origin_station_id, destination_station_id, train_id) VALUES (\'" + 

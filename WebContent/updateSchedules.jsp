@@ -61,7 +61,7 @@ else {
 	ResultSet rs7 = st7.executeQuery("SELECT * from Station where id ='" + destID + "';");
 	ResultSet rs8 = st8.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = '" + transit + "' and ('" + originDTime + "' > arrival_time or '" + destATime + "' < departure_time)");
 	ResultSet rs10 = st10.executeQuery("SELECT * FROM Stops_In_Between WHERE transit_line_name = '" + transit + "' and (id = '" + originID + "' or id = '" + destID + "')");
-	if (!rs5.next()||!rs6.next()||!rs7.next()||rs8.next()||rs10.next()) {
+	if (!rs5.next()) {
 		rs5.close();
 		rs6.close();
 		rs7.close();
@@ -76,7 +76,37 @@ else {
 		out.println("<p>Sorry, Invalid Train ID or Station IDs or Timings or Tried to set stop as origin/destination before deleting</p>");
     	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
           
-	} else {
+	} else if (!rs6.next()||!rs7.next()) {
+		rs5.close();
+		rs6.close();
+		rs7.close();
+		rs8.close();
+		rs10.close();
+		st5.close();
+		st6.close();
+		st7.close();
+		st8.close();
+		st10.close();
+		db.closeConnection(con);
+		out.println("<p>Sorry, Station ID is invalid</p>");
+    	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
+    	
+ 	} else if (rs8.next()||rs10.next()) {
+		rs5.close();
+		rs6.close();
+		rs7.close();
+		rs8.close();
+		rs10.close();
+		st5.close();
+		st6.close();
+		st7.close();
+		st8.close();
+		st10.close();
+		db.closeConnection(con);
+		out.println("<p>Sorry, Tried to set stop as origin/destination before deleting that stop from line</p>");
+    	out.println("<button onclick=\"window.location.href='schedules.jsp';\">Go Back</button>");
+    	
+ 	}else {
 		Statement st2 = con.createStatement();
     	
 		Statement st9 = con.createStatement();
