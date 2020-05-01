@@ -29,7 +29,7 @@
 	int isMonthly = 0;
 	int isWeekly = 0;
 	int isRoundTrip = 0;
-	String username = request.getParameter("userID");
+	String username = (String) session.getAttribute("user");
 	String query;
 	String rideQuery = "";
 	
@@ -48,7 +48,7 @@
 		booking_fee = isMonthly==1 ? 1000 : 300;
 		query = "INSERT INTO Reservation_Portfolio(date_made, booking_fee, isMonthly, isWeekly, isRoundTrip, username)"
 				+ " VALUES (\'" + date + "\', \'" + booking_fee
-				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \'" + username + "\')";
+				+ "\', \'" + isMonthly + "\', \'" + isWeekly + "\', \'" + isRoundTrip + "\', \"" + username + "\")";
 				
 		//execute
 		st.executeUpdate(query);
