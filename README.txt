@@ -27,10 +27,11 @@ III. Reservations (James)
   [X] cancel existing reservation
   [X] view current and past reservations with their details.
 IV. Messaging functions (Srija)
-  [] send a question to the customer service (customer reps will reply it)
-  [] browse questions and answers
-  [] search questions and answers
-  [] get an alert message in case a route is delayed.
+  [X] send a question to the customer service (customer reps will reply it)
+  [X] Rep replies to customer questions (I misread the checklist and did this too because I thought it was my part)
+  [X] browse questions and answers
+  [X] search questions and answers
+  [X] get an alert message in case a route is delayed.
 V. Admin functions (Ronak)
   [] Admin (create an admin account ahead of time)
   [] Add, Edit and Delete information for an employee/customer
