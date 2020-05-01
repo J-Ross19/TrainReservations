@@ -7,8 +7,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Representative Messaging Dashboard</title>
+	<meta charset="ISO-8859-1">
+	<title>Representative Messaging Dashboard</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+	<style>
+	body {
+	margin: 0 !important;
+	}
+	</style>
 </head>
 <body>
     <%

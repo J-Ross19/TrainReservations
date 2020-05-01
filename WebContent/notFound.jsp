@@ -7,6 +7,12 @@
 <html>
    <head>
       <title>Not Found</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/light.min.css">
+		<style>
+		body {
+		margin: 0 !important;
+		}
+		</style>
    </head>
    <body>
    	<p>You are not logged in or you do not have permission to access this page</p><br/>
