@@ -6,8 +6,7 @@
 
 <html>
 
-
-	<!-- page with all the features -->
+	<!-- page with all the buttons -->
 	<head>
 		<meta charset="ISO-8859-1">
 		<title>Browse and Search</title>
@@ -24,16 +23,15 @@
 			<h3>Search Train Schedules</h3>
 			
 			<form action="trainSched.jsp" method="post">
-				<label for="origin">Origin:</label>
-  				<input name="origin" type="text"/>
+				<label for="origin">Origin ID:</label>
+  				<input name="origin" type="number"/>
   
-  				<label for="dest">Destination:</label>
-  				<input name="dest" type="text"/>
+  				<label for="dest">Destination ID:</label>
+  				<input name="dest" type="number"/>
   				<br>
 				<label for="tDate">Date of Travel (YYYY-MM-DD):</label>
 				<input name="tDate" type="text"/>				
 				<br>
-				<label for="appt">Choose a time for your meeting:</label>
 				<button>Search</button>
 			</form>
 		</section>
@@ -46,21 +44,21 @@
 			<h3>Sort All Trains</h3>
 			<form action="sortTrains.jsp" method="post">
 				
-				<label for="type">Sort by:</label>
+				<label for="sortType">Sort by:</label>
 
-				<select id="type">
-  					<option value="aTime">Arrival Time</option>
- 					<option value="dTime">Departure Time</option>
+				<select name="sortType">
+  					<option value="arrival time">Arrival Time</option>
+ 					<option value="departure time">Departure Time</option>
   					<option value="origin">Origin</option>
- 					<option value="dest">Destination</option>
+ 					<option value="destination">Destination</option>
  					<option value="fare">Fare</option>
 				</select>
 				
-				<label for="order">Order:</label>
+				<label for="sortOrder">Order:</label>
 
-				<select id="order">
-  					<option value="asc">Ascending</option>
- 					<option value="des">Descending</option>
+				<select name="sortOrder">
+  					<option value="ascending">Ascending</option>
+ 					<option value="descending">Descending</option>
 				</select>
 				<br>
 				<button>Search</button>
@@ -75,11 +73,14 @@
 			<h3>See Train Stops</h3>
     
 			<form action="stops.jsp" method="post">	
-				<label for="origin">Origin:</label>
-  				<input name="origin" type="text"/>
+				<label for="origin">Origin ID:</label>
+  				<input name="origin" type="number"/>
   
-  				<label for="dest">Destination:</label>
-  				<input name="dest" type="text"/>
+  				<label for="dest">Destination ID:</label>
+  				<input name="dest" type="number"/>
+  				<br>
+  				<label for="line">Train Line:</label>
+				<input name="line" type="text"/>
   				<br>
 				<button>Search</button>
 			</form>
