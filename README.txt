@@ -22,10 +22,10 @@ II. Browsing and search functionality (Bridget)
   [X] sort by different criteria (by arrival time, departure time, origin, destination, fare)
   [X] a user should be able to see all the stops a train will make
 III. Reservations (James)
-  [] a customer should be able to make a reservation for a specific route
-  [] get a discount in case of child/senior/disabled
-  [] cancel existing reservation
-  [] view current and past reservations with their details.
+  [X] a customer should be able to make a reservation for a specific route
+  [X] get a discount in case of child/senior/disabled
+  [X] cancel existing reservation
+  [X] view current and past reservations with their details.
 IV. Messaging functions (Srija)
   [] send a question to the customer service (customer reps will reply it)
   [] browse questions and answers
