@@ -46,7 +46,7 @@
     	Statement st5 = con.createStatement();
     	Statement st6 = con.createStatement();
     	Statement st8 = con.createStatement();
-    	ResultSet rs = st.executeQuery("SELECT * from Stops_In_Between where transit_line_name='" + transit + "' and id='" + stationID + "'");
+    	ResultSet rs = st.executeQuery("SELECT * from (SELECT transit_line_name, origin_station_id AS id, origin_departure_time AS departure_time, origin_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On UNION SELECT transit_line_name, destination_station_id AS id, destination_departure_time AS departure_time, destination_arrival_time AS arrival_time FROM Schedule_Origin_of_Train_Destination_of_Train_On UNION SELECT * FROM Stops_In_Between) AS Temp where transit_line_name='" + transit + "' and id='" + stationID + "'");
     	ResultSet rs5 = st5.executeQuery("SELECT * from Schedule_Origin_of_Train_Destination_of_Train_On where transit_line_name ='" + transit + "';");
     	ResultSet rs6 = st6.executeQuery("SELECT * from Station where id ='" + stationID + "';");
     	ResultSet rs8 = st8.executeQuery("SELECT transit_line_name FROM Schedule_Origin_of_Train_Destination_of_Train_On"
